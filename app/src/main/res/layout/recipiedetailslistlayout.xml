@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/recipieDetailsDesciptionTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:textSize="20sp"
+        tools:text="Remove from oven and cool at room temperature." />
+
+    <View
+        android:id="@+id/recipieDetailsHorizontalBar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/recipieDetailsDesciptionTextView"
+        android:background="#000000" />
+
+
+</RelativeLayout>
