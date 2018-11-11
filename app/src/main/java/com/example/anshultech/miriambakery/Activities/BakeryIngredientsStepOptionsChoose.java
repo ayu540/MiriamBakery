@@ -45,6 +45,27 @@ public class BakeryIngredientsStepOptionsChoose extends AppCompatActivity {
             mBakeryIngridentsListBeans = getIntent().getExtras().getParcelableArrayList("INGREDINET_LIST");
             mBakeryStepsListBeans = getIntent().getExtras().getParcelableArrayList("STEPS_LIST");
         }
+        prepareRecipieButtonData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RECIPIE_CHOOSER_LIST_CODE) {
+                if (data != null) {
+                    mBakeryRecipiesListBeans = getIntent().getExtras().getParcelableArrayList("BAKERY_MASTER_LIST");
+                    mRecipeMasterListClickedPosition = getIntent().getExtras().getInt("CLICKED_POSITION");
+                    mBakeryIngridentsListBeans = getIntent().getExtras().getParcelableArrayList("INGREDINET_LIST");
+                    mBakeryStepsListBeans = getIntent().getExtras().getParcelableArrayList("STEPS_LIST");
+                }
+                prepareRecipieButtonData();
+            }
+        }
+    }
+
+    private void prepareRecipieButtonData() {
+
 
         if (mBakeryStepsListBeans != null && mBakeryIngridentsListBeans != null) {
             mIngredientsButton.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +96,5 @@ public class BakeryIngredientsStepOptionsChoose extends AppCompatActivity {
                 }
             });
         }
-
     }
 }

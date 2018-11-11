@@ -4,27 +4,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal">
+   <LinearLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerInParent="true"
+       android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/recipeOptyionChooseIngriedientsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recipe Ingridents"
-            android:textSize="15sp" />
+      <Button
+          android:id="@+id/recipeOptyionChooseIngriedientsButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Recipe Ingridents"
+          android:textSize="15sp" />
 
-        <Button
-            android:id="@+id/recipeOptyionChooseStepsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recipe Steps"
-            android:textSize="15sp" />
+      <Button
+          android:id="@+id/recipeOptyionChooseStepsButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Recipe Steps"
+          android:textSize="15sp" />
 
 
-    </LinearLayout>
+   </LinearLayout>
 
 </RelativeLayout>

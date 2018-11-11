@@ -27,7 +27,7 @@ public class BakerryRecipieDetailView extends AppCompatActivity {
     private BakeryDetailsRecyclerViewAdapter mbBakeryDetailsRecyclerViewAdapter;
     private RecyclerView mRecipiDetailsViewRecyClerView;
     private String RECIPE_LIST_TYPE;
-    private final int BAKERY_STEPS_CLICKED= 13;
+    private final int BAKERY_STEPS_CLICKED = 13;
 
 
     @Override
@@ -47,6 +47,13 @@ public class BakerryRecipieDetailView extends AppCompatActivity {
             mRecipeMasterListClickedPosition = getIntent().getExtras().getInt("CLICKED_POSITION");
             RECIPE_LIST_TYPE = getIntent().getExtras().getString("LIST_TYPE");
         }
+
+
+        loadRecipieListItems();
+
+    }
+
+    private void loadRecipieListItems() {
 
         if (RECIPE_LIST_TYPE.equalsIgnoreCase("Ingredients")) {
             getSupportActionBar().setTitle("Recipie Ingredients");
@@ -74,8 +81,8 @@ public class BakerryRecipieDetailView extends AppCompatActivity {
                             @Override
                             public void onBakeryDetailsStepsCliCkListenerr(int position,
                                                                            ArrayList<BakeryStepsListBean> bakeryStepsListBeans) {
-                                Intent intent= new Intent(mContext, BakeryRecipeStepsVideoPlayer.class );
-                                Bundle bundle= new Bundle();
+                                Intent intent = new Intent(mContext, BakeryRecipeStepsVideoPlayer.class);
+                                Bundle bundle = new Bundle();
                                 bundle.putInt("STEPS_CLICKED_POSITION", position);
                                 bundle.putParcelableArrayList("VIDEO_STEPS_LIST", bakeryStepsListBeans);
                                 intent.putExtras(bundle);
@@ -87,6 +94,35 @@ public class BakerryRecipieDetailView extends AppCompatActivity {
                 mRecipiDetailsViewRecyClerView.setAdapter(mbBakeryDetailsRecyclerViewAdapter);
             }
 
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent bakeryStepsReturnIntent = getIntent();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryRecipiesListBeans);
+        bundle.putInt("CLICKED_POSITION", mRecipeMasterListClickedPosition);
+        bundle.putParcelableArrayList("INGREDINET_LIST",mBakeryRecipiesListBeans.get(mRecipeMasterListClickedPosition).getBakeryIngridentsListBeans() );
+        bundle.putParcelableArrayList("STEPS_LIST", mBakeryRecipiesListBeans.get(mRecipeMasterListClickedPosition).getBakeryStepsListBeans());
+        bakeryStepsReturnIntent.putExtras(bundle);
+        setResult(RESULT_OK, bakeryStepsReturnIntent);
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == BAKERY_STEPS_CLICKED) {
+                if (data != null) {
+                    mBakeryRecipiesListBeans = data.getExtras().getParcelableArrayList("BAKERY_MASTER_LIST");
+                    //  mRecipeMasterListClickedPosition = getIntent().getExtras().getInt("CLICKED_POSITION");
+                    RECIPE_LIST_TYPE = data.getExtras().getString("LIST_TYPE");
+                }
+                loadRecipieListItems();
+            }
         }
     }
 }
