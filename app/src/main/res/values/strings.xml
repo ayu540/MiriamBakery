@@ -2,5 +2,7 @@
     <string name="app_name">MiriamBakery</string>
     <string name="drawer_open">Drawer Open</string>
     <string name="drawer_close">Drawer close</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

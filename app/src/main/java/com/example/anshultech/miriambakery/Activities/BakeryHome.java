@@ -148,7 +148,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                 }
         );
 
-        VolleyConnectionClass.getInstance(mContext).addToRequestQueue(jsonArrayRequest, this);
+        VolleyConnectionClass.getInstance(mContext).addToRequestQueue(jsonArrayRequest);
     }
 
     @Override
