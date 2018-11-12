@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -16,9 +18,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +51,9 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 
-public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements Player.EventListener {
+import static android.app.Activity.RESULT_OK;
+
+public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.EventListener, BakeryHome.OnBackPressedListener {
 
     private SimpleExoPlayerView mSimpleExoPlayerView;
     private SimpleExoPlayer mSimpleExoPlayer;
@@ -68,30 +74,37 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
     private NavigationView navigationView;
     private Toolbar navigationDrawerToolbar;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private boolean mTwoPane = false;
 
+    public BakeryRecipeStepsVideoPlayer() {
+    }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_steps_vidoes_player);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View attachedRootView = inflater.inflate(R.layout.activity_recipe_steps_vidoes_player, container, false);
+
+        mSimpleExoPlayerView = (SimpleExoPlayerView) attachedRootView.findViewById(R.id.recipeStepsVideoPlayerSimpleExoPlayer);
+        mRecipeVideoDescriptionTextView = (TextView) attachedRootView.findViewById(R.id.recipeVideoDescriptionTextView);
 
         mBakeryStepsListBeans = new ArrayList<BakeryStepsListBean>();
-        mContext = BakeryRecipeStepsVideoPlayer.this;
 
-        if(savedInstanceState!=null) {
+        mVideosClickedPostion = getArguments().getInt("STEPS_CLICKED_POSITION");
+        mBakeryStepsListBeans = getArguments().getParcelableArrayList("VIDEO_STEPS_LIST");
+        mTwoPane = getArguments().getBoolean("IS_TWO_PANE");
+
+        if (savedInstanceState != null) {
             mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
             mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
         }
-        else {
-            if (getIntent() != null) {
-                mVideosClickedPostion = getIntent().getExtras().getInt("STEPS_CLICKED_POSITION");
-                mBakeryStepsListBeans = getIntent().getExtras().getParcelableArrayList("VIDEO_STEPS_LIST");
-            }
-        }
 
-
-        mSimpleExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.recipeStepsVideoPlayerSimpleExoPlayer);
-        mRecipeVideoDescriptionTextView = (TextView) findViewById(R.id.recipeVideoDescriptionTextView);
 
         mSimpleExoPlayerView.setVisibility(View.VISIBLE);
 
@@ -104,22 +117,31 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
         }
 
         mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
-
-
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mBakeryStepsListBeans.get(mVideosClickedPostion).getShortDescription());
         //navigation Drawer Layout
 
-        designNavigationViewDrawerLayout = findViewById(R.id.design_navigation_view);
-        navigationView = findViewById(R.id.navigationView);
-        navigationDrawerToolbar =findViewById(R.id.navigationDrawerToolbar);
-        setSupportActionBar(navigationDrawerToolbar);
-        getSupportActionBar().setTitle(mBakeryStepsListBeans.get(mVideosClickedPostion).getShortDescription());
+
+        //   ((AppCompatActivity) getActivity()).setSupportActionBar(navigationDrawerToolbar);
+
         //ActionBar actionBar = getSupportActionBar();
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, designNavigationViewDrawerLayout, navigationDrawerToolbar,
+        if (mTwoPane == false) {
+            designNavigationViewDrawerLayout = attachedRootView.findViewById(R.id.design_navigation_view);
+            navigationView = attachedRootView.findViewById(R.id.navigationView);
+            navigationDrawerToolbar = attachedRootView.findViewById(R.id.navigationDrawerToolbar);
+            loadNavigationDrawer();
+        }
+
+
+        return attachedRootView;
+    }
+
+    private void loadNavigationDrawer() {
+        actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), designNavigationViewDrawerLayout, navigationDrawerToolbar,
                 R.string.drawer_open, R.string.drawer_close);
         designNavigationViewDrawerLayout.addDrawerListener(actionBarDrawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_background);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_background);
 
 
         //add menu items dynamically
@@ -135,12 +157,12 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 for (int i = 0; i < navigationView.getMenu().size(); i++) {
                     if (menuItem == navigationView.getMenu().getItem(i)) {
-                        Intent intent = new Intent(BakeryRecipeStepsVideoPlayer.this, BakeryRecipeStepsVideoPlayer.class);
+                        BakeryRecipeStepsVideoPlayer bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayer();
                         Bundle bundle = new Bundle();
                         bundle.putInt("STEPS_CLICKED_POSITION", i);
                         bundle.putParcelableArrayList("VIDEO_STEPS_LIST", mBakeryStepsListBeans);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+                        bundle.putBoolean("IS_TWO_PANE", mTwoPane);
+                        bakeryRecipeStepsVideoPlayer.setArguments(bundle);
                         releasePlayer();
                     }
                 }
@@ -149,16 +171,15 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
                 return true;
             }
         });
-
-
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("INSTANCE_SAVED_VIDEO_POSITION", mVideosClickedPostion);
-        outState.putParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST", mBakeryStepsListBeans);
-        super.onSaveInstanceState(outState);
-    }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        outState.putInt("INSTANCE_SAVED_VIDEO_POSITION", mVideosClickedPostion);
+//        outState.putParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST", mBakeryStepsListBeans);
+//        super.onSaveInstanceState(outState);
+//    }
 //
 //    @Override
 //    protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -184,7 +205,7 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
     }
 
     private void initializeMediaSession() {
-        mMediaSession = new MediaSessionCompat(this, "BakeryRecipiesVideoActivity");
+        mMediaSession = new MediaSessionCompat(mContext, "BakeryRecipiesVideoActivity");
 
         // Enable callbacks from MediaButtons and TransportControls.
 
@@ -215,28 +236,22 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
 
 
     @Override
+    public void doBack() {
+
+        if (mTwoPane == false) {
+            if (designNavigationViewDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                this.doubleBackToExitPressedOnce = false;
+                designNavigationViewDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        }
+        getFragmentManager().popBackStack("CHOOSE_OPTION_LAYOUT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+    }
+ /*   @Override
     public void onBackPressed() {
         //   super.onBackPressed();
-        if (designNavigationViewDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.doubleBackToExitPressedOnce = false;
-            designNavigationViewDrawerLayout.closeDrawer(GravityCompat.START);
-        }
 
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            Intent bakeryStepsReturnIntent = getIntent();
-            Bundle bundle = new Bundle();
 
-            bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryStepsListBeans);
-            bundle.putString("LIST_TYPE", "Steps");
-            bakeryStepsReturnIntent.putExtras(bundle);
-            setResult(RESULT_OK, bakeryStepsReturnIntent);
-            finish();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
@@ -246,10 +261,10 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
 //        }, 2000);
 
 
-    }
+    }*/
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
  /*       if (mSimpleExoPlayer != null) {
             releasePlayer();
@@ -257,7 +272,7 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
    /*     if (mSimpleExoPlayer != null) {
             releasePlayer();
@@ -270,7 +285,7 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
         // switch (item.getItemId()) {
 //            case R.id.navMenuHomePage: {
         designNavigationViewDrawerLayout.openDrawer(GravityCompat.START);
-        NavUtils.navigateUpFromSameTask(this);
+        NavUtils.navigateUpFromSameTask(getActivity());
         //   return true;
 //            }
 //        }
@@ -279,7 +294,7 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         releasePlayer();
     }
@@ -351,19 +366,21 @@ public class BakeryRecipeStepsVideoPlayer extends AppCompatActivity implements P
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
     }
 
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        actionBarDrawerToggle.syncState();
-    }
+//    @Override
+//    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+//        super.onPostCreate(savedInstanceState);
+//        actionBarDrawerToggle.syncState();
+//    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
+
+
 }
