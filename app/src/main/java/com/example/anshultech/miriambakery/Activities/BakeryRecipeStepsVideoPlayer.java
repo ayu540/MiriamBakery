@@ -1,12 +1,12 @@
 package com.example.anshultech.miriambakery.Activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,13 +19,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.anshultech.miriambakery.Bean.BakeryStepsListBean;
 import com.example.anshultech.miriambakery.R;
@@ -51,8 +51,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
-
-import static android.app.Activity.RESULT_OK;
 
 public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.EventListener, BakeryHome.OnBackPressedListener {
 
@@ -101,10 +99,10 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
         mBakeryStepsListBeans = getArguments().getParcelableArrayList("VIDEO_STEPS_LIST");
         mTwoPane = getArguments().getBoolean("IS_TWO_PANE");
 
-        if (savedInstanceState != null) {
-            mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
-            mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
-        }
+//        if (savedInstanceState != null) {
+//            mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
+//            mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
+//        }
 
 
         mSimpleExoPlayerView.setVisibility(View.VISIBLE);
@@ -134,6 +132,27 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
 
 
         return attachedRootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("INSTANCE_SAVED_VIDEO_POSITION", mVideosClickedPostion);
+        outState.putParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST", mBakeryStepsListBeans);
+        outState.putBoolean("INSTANCE_SAVED_TWO_PANE", mTwoPane);
+        Log.d("BakeryRecipiesVideoPl", "onSaveInstanceState Instance State" + outState);
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d("BakeryRecipiesVideoPl", "onActivityCreated Instance State" + savedInstanceState);
+        if (savedInstanceState != null) {
+            mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
+            mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
+            mTwoPane = savedInstanceState.getBoolean("INSTANCE_SAVED_TWO_PANE");
+        }
     }
 
     private void loadNavigationDrawer() {
@@ -169,7 +188,7 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
                         FragmentTransaction fragmentTransaction = fragmentManager
                                 .beginTransaction();
                         fragmentTransaction
-                                .replace(R.id.frameLayoutPhone, bakeryRecipeStepsVideoPlayer)
+                                .replace(R.id.frameLayoutPhoneOptionsDetails, bakeryRecipeStepsVideoPlayer)
                                 .addToBackStack(null).commit();
                     }
                 }
@@ -386,7 +405,18 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        actionBarDrawerToggle.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d("BakeryRecipiesVideoPl", "Config Change to LANDSCAPE");
+            mRecipeVideoDescriptionTextView.setVisibility(View.GONE);
+            designNavigationViewDrawerLayout.setVisibility(View.GONE);
+            mSimpleExoPlayerView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
+//
+// else {
+//            BakeryRecipeStepsVideoPlayer bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayer();
+//        }
+
+
     }
 
 

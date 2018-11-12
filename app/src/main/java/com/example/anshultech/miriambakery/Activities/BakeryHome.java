@@ -109,7 +109,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                                             if (!bakeryIngredientsStepOptionsChoose.isAdded()) {
                                                 fragmentTransaction
                                                         .replace(R.id.tabletViewFrameLayout, bakeryIngredientsStepOptionsChoose)
-                                                        .addToBackStack("CHOOSE_OPTION_LAYOUT").commit();
+                                                        .addToBackStack(null).commit();
                                             } else {
                                                 fragmentTransaction.show(bakeryIngredientsStepOptionsChoose);
                                             }

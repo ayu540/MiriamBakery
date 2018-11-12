@@ -53,7 +53,7 @@ public class BakeryShowViews extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager
                 .beginTransaction();
         fragmentTransaction
-                .replace(R.id.frameLayoutPhone, bakeryIngredientsStepOptionsChoose)
+                .replace(R.id.frameLayoutPhoneOptionsDetails, bakeryIngredientsStepOptionsChoose)
                 .addToBackStack(null).commit();
 
 

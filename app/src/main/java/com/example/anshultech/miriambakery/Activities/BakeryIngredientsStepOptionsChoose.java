@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,7 +143,7 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
             if (!bakerryRecipieDetailView.isAdded()) {
                 fragmentTransaction
                         .replace(R.id.tabletViewFrameLayout, bakerryRecipieDetailView)
-                        .addToBackStack("DETAILS_VIEW_LAYOUT").commit();
+                        .addToBackStack(null).commit();
             } else {
                 fragmentTransaction.show(bakerryRecipieDetailView);
             }
@@ -156,8 +155,8 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
             FragmentTransaction fragmentTransaction = fragmentManager
                     .beginTransaction();
             fragmentTransaction
-                    .replace(R.id.frameLayoutPhone, bakerryRecipieDetailView)
-                    .addToBackStack("CHOOSE_OPTION_LAYOUT").commit();
+                    .replace(R.id.frameLayoutPhoneOptionsDetails, bakerryRecipieDetailView)
+                    .addToBackStack(null).commit();
 
         }
     }
