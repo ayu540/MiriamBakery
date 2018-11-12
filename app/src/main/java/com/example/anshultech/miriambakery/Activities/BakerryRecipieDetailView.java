@@ -37,7 +37,7 @@ public class BakerryRecipieDetailView extends Fragment {
     private RecyclerView mRecipiDetailsViewRecyClerView;
     private String RECIPE_LIST_TYPE;
     private final int BAKERY_STEPS_CLICKED = 13;
-    private boolean mTwoPane=false;
+    private boolean mTwoPane = false;
 
     public BakerryRecipieDetailView() {
     }
@@ -83,7 +83,7 @@ public class BakerryRecipieDetailView extends Fragment {
     private void loadRecipieListItems() {
 
         if (RECIPE_LIST_TYPE.equalsIgnoreCase("Ingredients")) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Recipie Ingredients");
+            //    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Recipie Ingredients");
             mBakeryIngridentsListBeans = getArguments().getParcelableArrayList("INGREDINET_LIST");
             if (mBakeryIngridentsListBeans != null) {
 
@@ -101,7 +101,7 @@ public class BakerryRecipieDetailView extends Fragment {
             }
         } else if (RECIPE_LIST_TYPE.equalsIgnoreCase("Steps")) {
             mBakeryStepsListBeans = getArguments().getParcelableArrayList("STEPS_LIST");
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Recipie Steps");
+            //  ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Recipie Steps");
             if (mBakeryStepsListBeans != null) {
                 mbBakeryDetailsRecyclerViewAdapter = new BakeryDetailsRecyclerViewAdapter(mContext, mBakeryStepsListBeans,
                         new BakeryDetailsRecyclerViewAdapter.BakeryDetailsStepsOnClickListener() {
@@ -113,11 +113,12 @@ public class BakerryRecipieDetailView extends Fragment {
                                 bundle.putInt("STEPS_CLICKED_POSITION", position);
                                 bundle.putParcelableArrayList("VIDEO_STEPS_LIST", bakeryStepsListBeans);
                                 bundle.putBoolean("IS_TWO_PANE", mTwoPane);
+                                BakeryRecipeStepsVideoPlayer bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayer();
+                                bakeryRecipeStepsVideoPlayer.setArguments(bundle);
                                 //  intent.putExtras(bundle);
                                 if (mTwoPane == true) {
 
-                                    BakeryRecipeStepsVideoPlayer bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayer();
-                                    bakeryRecipeStepsVideoPlayer.setArguments(bundle);
+
                                     FragmentManager fragmentManager = getFragmentManager();
                                     FragmentTransaction fragmentTransaction = fragmentManager
                                             .beginTransaction();
@@ -131,8 +132,13 @@ public class BakerryRecipieDetailView extends Fragment {
 
 
                                 } else {
-                                    BakeryRecipeStepsVideoPlayer bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayer();
-                                    bakeryRecipeStepsVideoPlayer.setArguments(bundle);
+
+                                    FragmentManager fragmentManager = getFragmentManager();
+                                    FragmentTransaction fragmentTransaction = fragmentManager
+                                            .beginTransaction();
+                                    fragmentTransaction
+                                            .replace(R.id.frameLayoutPhone, bakeryRecipeStepsVideoPlayer)
+                                            .addToBackStack("CHOOSE_OPTION_LAYOUT").commit();
 
                                 }
 

@@ -25,6 +25,7 @@ public class VolleyConnectionClass {
     private static VolleyConnectionClass mInstance;
     private RequestQueue mRequestQueue;
     private static Context mContext;
+    private NetworkConnectionInferface networkConnectionInferface;
 
     private VolleyConnectionClass(Context context) {
         mContext = context;
@@ -112,8 +113,15 @@ public class VolleyConnectionClass {
         return stringRequest;
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
+    public <T> void addToRequestQueue(Request<T> req, NetworkConnectionInferface networkConnectionInferface) {
         getRequestQueue().add(req);
+        this.networkConnectionInferface= networkConnectionInferface;
     }
+
+    public interface NetworkConnectionInferface{
+        void isNetworkAvailable();
+    }
+
+
 
 }

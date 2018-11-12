@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class BakeryHome extends AppCompatActivity {
+public class BakeryHome extends AppCompatActivity implements VolleyConnectionClass.NetworkConnectionInferface {
 
     private Context mContext;
     private RecyclerView mRecipiListRecyclerView;
@@ -97,11 +97,12 @@ public class BakeryHome extends AppCompatActivity {
                                         bundle.putParcelableArrayList("INGREDINET_LIST", bakeryRecipiesListBeans.get(position).getBakeryIngridentsListBeans());
                                         bundle.putParcelableArrayList("STEPS_LIST", bakeryRecipiesListBeans.get(position).getBakeryStepsListBeans());
                                         bundle.putBoolean("IS_TWO_PANE", mTwoPane);
+                                        BakeryIngredientsStepOptionsChoose bakeryIngredientsStepOptionsChoose = new BakeryIngredientsStepOptionsChoose();
+                                        bakeryIngredientsStepOptionsChoose.setArguments(bundle);
                                         //  intent.putExtras(bundle);
                                         if (mTwoPane == true) {
 
-                                            BakeryIngredientsStepOptionsChoose bakeryIngredientsStepOptionsChoose = new BakeryIngredientsStepOptionsChoose();
-                                            bakeryIngredientsStepOptionsChoose.setArguments(bundle);
+
                                             FragmentManager fragmentManager = getSupportFragmentManager();
                                             FragmentTransaction fragmentTransaction = fragmentManager
                                                     .beginTransaction();
@@ -115,8 +116,15 @@ public class BakeryHome extends AppCompatActivity {
 
 
                                         } else {
-                                            BakeryIngredientsStepOptionsChoose bakeryIngredientsStepOptionsChoose = new BakeryIngredientsStepOptionsChoose();
-                                            bakeryIngredientsStepOptionsChoose.setArguments(bundle);
+//                                            FragmentManager fragmentManager = getSupportFragmentManager();
+//                                            FragmentTransaction fragmentTransaction = fragmentManager
+//                                                    .beginTransaction();
+//                                            fragmentTransaction
+//                                                    .replace(R.id.frameLayoutBakeryHome, bakeryIngredientsStepOptionsChoose)
+//                                                    .addToBackStack("CHOOSE_OPTION_LAYOUT").commit();
+                                            Intent intent= new Intent(mContext, BakeryShowViews.class);
+                                            intent.putExtras(bundle);
+                                            startActivityForResult(intent, RECIPIE_MASTER_LIST_LISTENER_CODE);
 
                                         }
                                     }
@@ -140,9 +148,7 @@ public class BakeryHome extends AppCompatActivity {
                 }
         );
 
-        VolleyConnectionClass.getInstance(mContext).
-
-                addToRequestQueue(jsonArrayRequest);
+        VolleyConnectionClass.getInstance(mContext).addToRequestQueue(jsonArrayRequest, this);
     }
 
     @Override
@@ -165,6 +171,11 @@ public class BakeryHome extends AppCompatActivity {
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
+    }
+
+    @Override
+    public void isNetworkAvailable() {
+
     }
 
     public interface OnBackPressedListener {

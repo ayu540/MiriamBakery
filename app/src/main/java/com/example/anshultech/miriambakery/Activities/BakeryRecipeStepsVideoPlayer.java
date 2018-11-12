@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -116,18 +117,18 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
             mSimpleExoPlayerView.setVisibility(View.GONE);
         }
 
-        mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mBakeryStepsListBeans.get(mVideosClickedPostion).getShortDescription());
+
         //navigation Drawer Layout
 
-
-        //   ((AppCompatActivity) getActivity()).setSupportActionBar(navigationDrawerToolbar);
 
         //ActionBar actionBar = getSupportActionBar();
         if (mTwoPane == false) {
             designNavigationViewDrawerLayout = attachedRootView.findViewById(R.id.design_navigation_view);
             navigationView = attachedRootView.findViewById(R.id.navigationView);
             navigationDrawerToolbar = attachedRootView.findViewById(R.id.navigationDrawerToolbar);
+            mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
+            ((AppCompatActivity) getActivity()).setSupportActionBar(navigationDrawerToolbar);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mBakeryStepsListBeans.get(mVideosClickedPostion).getShortDescription());
             loadNavigationDrawer();
         }
 
@@ -141,7 +142,7 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
         designNavigationViewDrawerLayout.addDrawerListener(actionBarDrawerToggle);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_background);
+        // ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_background);
 
 
         //add menu items dynamically
@@ -164,6 +165,12 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
                         bundle.putBoolean("IS_TWO_PANE", mTwoPane);
                         bakeryRecipeStepsVideoPlayer.setArguments(bundle);
                         releasePlayer();
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager
+                                .beginTransaction();
+                        fragmentTransaction
+                                .replace(R.id.frameLayoutPhone, bakeryRecipeStepsVideoPlayer)
+                                .addToBackStack(null).commit();
                     }
                 }
                 menuItem.setChecked(true);

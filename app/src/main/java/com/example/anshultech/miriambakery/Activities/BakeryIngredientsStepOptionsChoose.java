@@ -50,7 +50,7 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        ((BakeryHome)getActivity()).setOnBackPressedListener(BakeryIngredientsStepOptionsChoose.this);
+      //  ((BakeryShowViews)getActivity()).setOnBackPressedListener(BakeryIngredientsStepOptionsChoose.this);
 
         View attachedRootView = inflater.inflate(R.layout.indridentasstepsclicklayout, container, false);
 
@@ -135,10 +135,9 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
     }
 
     private void loadNextActivity(Bundle bundle) {
-
+        BakerryRecipieDetailView bakerryRecipieDetailView = new BakerryRecipieDetailView();
+        bakerryRecipieDetailView.setArguments(bundle);
         if (mTwoPane == true) {
-            BakerryRecipieDetailView bakerryRecipieDetailView = new BakerryRecipieDetailView();
-            bakerryRecipieDetailView.setArguments(bundle);
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager
                     .beginTransaction();
@@ -152,8 +151,13 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
 
 
         } else {
-            BakerryRecipieDetailView bakerryRecipieDetailView = new BakerryRecipieDetailView();
-            bakerryRecipieDetailView.setArguments(bundle);
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager
+                    .beginTransaction();
+            fragmentTransaction
+                    .replace(R.id.frameLayoutPhone, bakerryRecipieDetailView)
+                    .addToBackStack("CHOOSE_OPTION_LAYOUT").commit();
 
         }
     }
