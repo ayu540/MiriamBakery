@@ -10,7 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.anshultech.miriambakery.Adapters.BakeryRecipiesListRecyclerViewAdapter;
-import com.example.anshultech.miriambakery.BakeryRecipiesShows;
+import com.example.anshultech.miriambakery.BakeryRecipiesHomwWidget;
 import com.example.anshultech.miriambakery.Bean.BakeryRecipiesListBean;
 import com.example.anshultech.miriambakery.Connection.ConnectionURL;
 import com.example.anshultech.miriambakery.Connection.VolleyConnectionClass;
@@ -124,11 +124,11 @@ public class BakeryRecipieShowService extends IntentService {
         );
 
         VolleyConnectionClass.getInstance(this).addToRequestQueue(jsonArrayRequest);
-
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, BakeryRecipiesShows.class));
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recycler_view);
-        BakeryRecipiesShows.updateAppWidget(this,appWidgetManager,appWidgetIds);
+//
+//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+//        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, BakeryRecipiesHomwWidget.class));
+//        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recycler_view);
+//        BakeryRecipiesHomwWidget.updateAppWidget(this,appWidgetManager,appWidgetIds);
 
     }
 

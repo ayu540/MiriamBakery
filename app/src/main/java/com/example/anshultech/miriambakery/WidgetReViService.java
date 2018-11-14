@@ -51,6 +51,38 @@ class WidgetReViRemoteViewsFactory implements RemoteViewsService.RemoteViewsFact
     @Override
     public void onCreate() {
 
+        JsonArrayRequest jsonArrayRequest = VolleyConnectionClass.getInstance(mContext).volleyJSONArrayRequest(
+                ConnectionURL.BAKING_RECIPIES_URL, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        Gson gson = new Gson();
+
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject jsonObject = new JSONObject();
+                            try {
+                                jsonObject = response.getJSONObject(i);
+                                BakeryRecipiesListBean bakeryRecipiesListBean = gson.fromJson(jsonObject.toString(), BakeryRecipiesListBean.class);
+                                int a = jsonObject.getInt("id");
+                                mBakeryRecipiesListBeans.add(bakeryRecipiesListBean);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+
+
+        );
+
+        VolleyConnectionClass.getInstance(mContext).addToRequestQueue(jsonArrayRequest);
     }
 
     @Override
@@ -109,14 +141,9 @@ class WidgetReViRemoteViewsFactory implements RemoteViewsService.RemoteViewsFact
         String recipiName = mBakeryRecipiesListBeans.get(position).getName();
         int servings = mBakeryRecipiesListBeans.get(position).getServings();
 
-        // views.setImageViewResource(R.id.widget_plant_image, imgRes);
         views.setTextViewText(R.id.masterListRecipeNameTV, recipiName);
         views.setTextViewText(R.id.servingValueTextView, Integer.toString(servings));
-        //views.setViewVisibility(R.id.widget_water_button, View.GONE);
 
-        /*masterListRecipeNameTV = (TextView) itemView.findViewById(R.id.masterListRecipeNameTV);
-        servingValueTextView = (TextView) itemView.findViewById(R.id.servingValueTextView);
-        recipiMasterListImageView = (ImageView) itemView.findViewById(R.id.recipiMasterListImageView);*/
 
         if (mBakeryRecipiesListBeans.get(position).getImage() != null) {
             String imageSource = mBakeryRecipiesListBeans.get(position).getImage().toString();
@@ -136,7 +163,7 @@ class WidgetReViRemoteViewsFactory implements RemoteViewsService.RemoteViewsFact
 
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(bundle);
-        views.setOnClickFillInIntent(R.id.widget_recycler_view, fillInIntent);
+        views.setOnClickFillInIntent(R.id.masterRecipieListContainer, fillInIntent);
         return views;
     }
 
@@ -151,7 +178,7 @@ class WidgetReViRemoteViewsFactory implements RemoteViewsService.RemoteViewsFact
     }
 
     @Override
-    public long getItemId(int i) {
+    public long getItemId(int position) {
         return 0;
     }
 

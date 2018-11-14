@@ -118,17 +118,21 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
 
         //navigation Drawer Layout
 
-
+        designNavigationViewDrawerLayout = attachedRootView.findViewById(R.id.design_navigation_view);
+        navigationView = attachedRootView.findViewById(R.id.navigationView);
+        navigationDrawerToolbar = attachedRootView.findViewById(R.id.navigationDrawerToolbar);
         //ActionBar actionBar = getSupportActionBar();
         if (mTwoPane == false) {
-            designNavigationViewDrawerLayout = attachedRootView.findViewById(R.id.design_navigation_view);
-            navigationView = attachedRootView.findViewById(R.id.navigationView);
-            navigationDrawerToolbar = attachedRootView.findViewById(R.id.navigationDrawerToolbar);
+            designNavigationViewDrawerLayout.setVisibility(View.VISIBLE);
             mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
             ((AppCompatActivity) getActivity()).setSupportActionBar(navigationDrawerToolbar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mBakeryStepsListBeans.get(mVideosClickedPostion).getShortDescription());
             loadNavigationDrawer();
         }
+        else{
+            designNavigationViewDrawerLayout.setVisibility(View.GONE);
+        }
+
 
 
         return attachedRootView;
