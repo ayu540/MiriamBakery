@@ -87,6 +87,17 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
         mContext = context;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mBakeryStepsListBeans = new ArrayList<BakeryStepsListBean>();
+
+        mVideosClickedPostion = getArguments().getInt("STEPS_CLICKED_POSITION");
+        mBakeryStepsListBeans = getArguments().getParcelableArrayList("VIDEO_STEPS_LIST");
+        mTwoPane = getArguments().getBoolean("IS_TWO_PANE");
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -96,11 +107,6 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
         mSimpleExoPlayerView = (SimpleExoPlayerView) attachedRootView.findViewById(R.id.recipeStepsVideoPlayerSimpleExoPlayer);
         mRecipeVideoDescriptionTextView = (TextView) attachedRootView.findViewById(R.id.recipeVideoDescriptionTextView);
 
-        mBakeryStepsListBeans = new ArrayList<BakeryStepsListBean>();
-
-        mVideosClickedPostion = getArguments().getInt("STEPS_CLICKED_POSITION");
-        mBakeryStepsListBeans = getArguments().getParcelableArrayList("VIDEO_STEPS_LIST");
-        mTwoPane = getArguments().getBoolean("IS_TWO_PANE");
 
 //        if (savedInstanceState != null) {
 //            mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
@@ -110,7 +116,7 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
 
         mSimpleExoPlayerView.setVisibility(View.VISIBLE);
 
-        if (!mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL().equalsIgnoreCase("") ) {
+        if (!mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL().equalsIgnoreCase("")) {
             String videoUriToParse = mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL();
             intializePlayer(Uri.parse(videoUriToParse));
             initializeMediaSession();
@@ -128,14 +134,12 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
         if (mTwoPane == false) {
             //designNavigationViewDrawerLayout.setVisibility(View.VISIBLE);
             mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
-        //    ((AppCompatActivity) getActivity()).setSupportActionBar(navigationDrawerToolbar);
+            //    ((AppCompatActivity) getActivity()).setSupportActionBar(navigationDrawerToolbar);
 //            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mBakeryStepsListBeans.get(mVideosClickedPostion).getShortDescription());
-          //  loadNavigationDrawer();
+            //  loadNavigationDrawer();
+        } else {
+            //  designNavigationViewDrawerLayout.setVisibility(View.GONE);
         }
-        else{
-          //  designNavigationViewDrawerLayout.setVisibility(View.GONE);
-        }
-
 
 
         return attachedRootView;
@@ -279,7 +283,7 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
                 designNavigationViewDrawerLayout.closeDrawer(GravityCompat.START);
             }
         }*/
-      //  getFragmentManager().popBackStack("CHOOSE_OPTION_LAYOUT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        //  getFragmentManager().popBackStack("CHOOSE_OPTION_LAYOUT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
     }
  /*   @Override
@@ -319,7 +323,7 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
 
         // switch (item.getItemId()) {
 //            case R.id.navMenuHomePage: {
-    //    designNavigationViewDrawerLayout.openDrawer(GravityCompat.START);
+        //    designNavigationViewDrawerLayout.openDrawer(GravityCompat.START);
         NavUtils.navigateUpFromSameTask(getActivity());
         //   return true;
 //            }
@@ -417,7 +421,7 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Log.d("BakeryRecipiesVideoPl", "Config Change to LANDSCAPE");
             mRecipeVideoDescriptionTextView.setVisibility(View.GONE);
-       //     designNavigationViewDrawerLayout.setVisibility(View.GONE);
+            //     designNavigationViewDrawerLayout.setVisibility(View.GONE);
             mSimpleExoPlayerView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
 //

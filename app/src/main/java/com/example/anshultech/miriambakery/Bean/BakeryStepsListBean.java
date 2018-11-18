@@ -19,6 +19,7 @@ public class BakeryStepsListBean implements Parcelable {
     private String thumbnailURL;
 
 
+
     public BakeryStepsListBean(){}
 
     protected BakeryStepsListBean(Parcel in) {

@@ -117,13 +117,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
 
 
                                         } else {
-//                                            FragmentManager fragmentManager = getSupportFragmentManager();
-//                                            FragmentTransaction fragmentTransaction = fragmentManager
-//                                                    .beginTransaction();
-//                                            fragmentTransaction
-//                                                    .replace(R.id.frameLayoutBakeryHome, bakeryIngredientsStepOptionsChooseFragment)
-//                                                    .addToBackStack("CHOOSE_OPTION_LAYOUT").commit();
-                                            Intent intent= new Intent(mContext, BakeryIngredientsStepOptionsChooseActivity.class);
+                                            Intent intent = new Intent(mContext, BakeryIngredientsStepOptionsChooseActivity.class);
                                             intent.putExtras(bundle);
                                             startActivityForResult(intent, RECIPIE_MASTER_LIST_LISTENER_CODE);
 

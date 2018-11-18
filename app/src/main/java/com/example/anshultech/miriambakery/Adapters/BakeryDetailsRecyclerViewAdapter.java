@@ -24,6 +24,7 @@ public class BakeryDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Baker
     private String mListType;
 
 
+
     public BakeryDetailsRecyclerViewAdapter(Context lContext, ArrayList<BakeryIngridentsListBean> bakeryIngridentsListBeans,
                                             BakeryDetailsIngredientsOnClickListener bakeryDetailsIngredientsOnClickListener, String listType) {
         this.mContext = lContext;

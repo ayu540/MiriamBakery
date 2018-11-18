@@ -113,6 +113,7 @@ public class VolleyConnectionClass {
         return stringRequest;
     }
 
+
     public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
        // this.networkConnectionInferface= networkConnectionInferface;

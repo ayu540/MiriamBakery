@@ -43,22 +43,26 @@ public class BakerryRecipieDetailViewFragment extends Fragment {
         mContext = context;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mBakeryRecipiesListBeans = new ArrayList<BakeryRecipiesListBean>();
+        mBakeryIngridentsListBeans = new ArrayList<BakeryIngridentsListBean>();
+        mBakeryStepsListBeans = new ArrayList<BakeryStepsListBean>();
+        mBakeryRecipiesListBeans = getArguments().getParcelableArrayList("BAKERY_MASTER_LIST");
+        mRecipeMasterListClickedPosition = getArguments().getInt("CLICKED_POSITION");
+        RECIPE_LIST_TYPE = getArguments().getString("LIST_TYPE");
+        mTwoPane = getArguments().getBoolean("IS_TWO_PANE");
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_bakery_recipie_detail_view, container, false);
 
-        mBakeryRecipiesListBeans = new ArrayList<BakeryRecipiesListBean>();
-        mBakeryIngridentsListBeans = new ArrayList<BakeryIngridentsListBean>();
-        mBakeryStepsListBeans = new ArrayList<BakeryStepsListBean>();
-
         mRecipiDetailsViewRecyClerView = (RecyclerView) rootView.findViewById(R.id.recipiDetailsViewRecyClerView);
         mRecipiDetailsViewRecyClerView.setLayoutManager(new LinearLayoutManager(mContext));
-
-        mBakeryRecipiesListBeans = getArguments().getParcelableArrayList("BAKERY_MASTER_LIST");
-        mRecipeMasterListClickedPosition = getArguments().getInt("CLICKED_POSITION");
-        RECIPE_LIST_TYPE = getArguments().getString("LIST_TYPE");
-        mTwoPane = getArguments().getBoolean("IS_TWO_PANE");
 
         if (savedInstanceState != null) {
             mBakeryRecipiesListBeans = savedInstanceState.getParcelableArrayList("BAKERY_MASTER_LIST");
