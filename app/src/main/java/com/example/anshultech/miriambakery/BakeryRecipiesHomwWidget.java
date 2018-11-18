@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
-import com.example.anshultech.miriambakery.Activities.BakeryIngredientsStepOptionsChoose;
 import com.example.anshultech.miriambakery.Activities.BakeryShowViews;
 
 /**

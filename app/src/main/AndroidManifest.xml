@@ -24,17 +24,11 @@
             android:name=".Activities.BakeryShowViews"
             android:parentActivityName=".Activities.BakeryHome"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <!-- <activity -->
-        <!-- android:name=".Activities.BakeryIngredientsStepOptionsChoose" -->
-        <!-- android:parentActivityName=".Activities.BakeryHome" /> -->
-        <!-- <activity -->
-        <!-- android:name=".Activities.BakerryRecipieDetailView" -->
-        <!-- android:parentActivityName=".Activities.BakeryIngredientsStepOptionsChoose" /> -->
 
+        <activity android:name=".Activities.BakeryIngredientsStepOptionsChooseActivity" />
+        <activity android:name=".Activities.BakerryRecipieDetailViewActivity" />
+        <activity android:name=".Activities.BakeryRecipeStepsVideoPlayerActivity" />
 
-        <!-- <activity -->
-        <!-- android:name=".Activities.BakeryRecipeStepsVideoPlayer" -->
-        <!-- android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> -->
 
         <receiver android:name=".BakeryRecipiesHomwWidget">
             <intent-filter>

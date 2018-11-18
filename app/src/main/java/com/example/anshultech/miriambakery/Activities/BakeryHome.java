@@ -18,6 +18,7 @@ import com.example.anshultech.miriambakery.Adapters.BakeryRecipiesListRecyclerVi
 import com.example.anshultech.miriambakery.Bean.BakeryRecipiesListBean;
 import com.example.anshultech.miriambakery.Connection.ConnectionURL;
 import com.example.anshultech.miriambakery.Connection.VolleyConnectionClass;
+import com.example.anshultech.miriambakery.Fragments.BakeryIngredientsStepOptionsChooseFragment;
 import com.example.anshultech.miriambakery.R;
 import com.google.gson.Gson;
 
@@ -97,8 +98,8 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                                         bundle.putParcelableArrayList("INGREDINET_LIST", bakeryRecipiesListBeans.get(position).getBakeryIngridentsListBeans());
                                         bundle.putParcelableArrayList("STEPS_LIST", bakeryRecipiesListBeans.get(position).getBakeryStepsListBeans());
                                         bundle.putBoolean("IS_TWO_PANE", mTwoPane);
-                                        BakeryIngredientsStepOptionsChoose bakeryIngredientsStepOptionsChoose = new BakeryIngredientsStepOptionsChoose();
-                                        bakeryIngredientsStepOptionsChoose.setArguments(bundle);
+                                        BakeryIngredientsStepOptionsChooseFragment bakeryIngredientsStepOptionsChooseFragment = new BakeryIngredientsStepOptionsChooseFragment();
+                                        bakeryIngredientsStepOptionsChooseFragment.setArguments(bundle);
                                         //  intent.putExtras(bundle);
                                         if (mTwoPane == true) {
 
@@ -106,12 +107,12 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                                             FragmentManager fragmentManager = getSupportFragmentManager();
                                             FragmentTransaction fragmentTransaction = fragmentManager
                                                     .beginTransaction();
-                                            if (!bakeryIngredientsStepOptionsChoose.isAdded()) {
+                                            if (!bakeryIngredientsStepOptionsChooseFragment.isAdded()) {
                                                 fragmentTransaction
-                                                        .replace(R.id.tabletViewFrameLayout, bakeryIngredientsStepOptionsChoose)
+                                                        .replace(R.id.tabletViewFrameLayout, bakeryIngredientsStepOptionsChooseFragment)
                                                         .addToBackStack(null).commit();
                                             } else {
-                                                fragmentTransaction.show(bakeryIngredientsStepOptionsChoose);
+                                                fragmentTransaction.show(bakeryIngredientsStepOptionsChooseFragment);
                                             }
 
 
@@ -120,9 +121,9 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
 //                                            FragmentTransaction fragmentTransaction = fragmentManager
 //                                                    .beginTransaction();
 //                                            fragmentTransaction
-//                                                    .replace(R.id.frameLayoutBakeryHome, bakeryIngredientsStepOptionsChoose)
+//                                                    .replace(R.id.frameLayoutBakeryHome, bakeryIngredientsStepOptionsChooseFragment)
 //                                                    .addToBackStack("CHOOSE_OPTION_LAYOUT").commit();
-                                            Intent intent= new Intent(mContext, BakeryShowViews.class);
+                                            Intent intent= new Intent(mContext, BakeryIngredientsStepOptionsChooseActivity.class);
                                             intent.putExtras(bundle);
                                             startActivityForResult(intent, RECIPIE_MASTER_LIST_LISTENER_CODE);
 

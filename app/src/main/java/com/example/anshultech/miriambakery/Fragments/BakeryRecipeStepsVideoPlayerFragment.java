@@ -1,4 +1,4 @@
-package com.example.anshultech.miriambakery.Activities;
+package com.example.anshultech.miriambakery.Fragments;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -27,6 +27,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.anshultech.miriambakery.Activities.BakeryHome;
+//import com.example.anshultech.miriambakery.Activities.MySessionCallBack;
+import com.example.anshultech.miriambakery.Activities.BakeryRecipeStepsVideoPlayerActivity;
 import com.example.anshultech.miriambakery.Bean.BakeryStepsListBean;
 import com.example.anshultech.miriambakery.R;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -52,7 +55,7 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 
-public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.EventListener, BakeryHome.OnBackPressedListener {
+public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Player.EventListener, BakeryHome.OnBackPressedListener {
 
     private SimpleExoPlayerView mSimpleExoPlayerView;
     private SimpleExoPlayer mSimpleExoPlayer;
@@ -69,13 +72,13 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
     private boolean doubleBackToExitPressedOnce = false;
 
     //navigation drawer layout
-    private DrawerLayout designNavigationViewDrawerLayout;
-    private NavigationView navigationView;
-    private Toolbar navigationDrawerToolbar;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
+//    private DrawerLayout designNavigationViewDrawerLayout;
+//    private NavigationView navigationView;
+//    private Toolbar navigationDrawerToolbar;
+//    private ActionBarDrawerToggle actionBarDrawerToggle;
     private boolean mTwoPane = false;
 
-    public BakeryRecipeStepsVideoPlayer() {
+    public BakeryRecipeStepsVideoPlayerFragment() {
     }
 
     @Override
@@ -107,7 +110,7 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
 
         mSimpleExoPlayerView.setVisibility(View.VISIBLE);
 
-        if (mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL() != null) {
+        if (!mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL().equalsIgnoreCase("") ) {
             String videoUriToParse = mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL();
             intializePlayer(Uri.parse(videoUriToParse));
             initializeMediaSession();
@@ -118,19 +121,19 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
 
         //navigation Drawer Layout
 
-        designNavigationViewDrawerLayout = attachedRootView.findViewById(R.id.design_navigation_view);
-        navigationView = attachedRootView.findViewById(R.id.navigationView);
-        navigationDrawerToolbar = attachedRootView.findViewById(R.id.navigationDrawerToolbar);
+//        designNavigationViewDrawerLayout = attachedRootView.findViewById(R.id.design_navigation_view);
+//        navigationView = attachedRootView.findViewById(R.id.navigationView);
+//        navigationDrawerToolbar = attachedRootView.findViewById(R.id.navigationDrawerToolbar);
         //ActionBar actionBar = getSupportActionBar();
         if (mTwoPane == false) {
-            designNavigationViewDrawerLayout.setVisibility(View.VISIBLE);
+            //designNavigationViewDrawerLayout.setVisibility(View.VISIBLE);
             mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
-            ((AppCompatActivity) getActivity()).setSupportActionBar(navigationDrawerToolbar);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mBakeryStepsListBeans.get(mVideosClickedPostion).getShortDescription());
-            loadNavigationDrawer();
+        //    ((AppCompatActivity) getActivity()).setSupportActionBar(navigationDrawerToolbar);
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mBakeryStepsListBeans.get(mVideosClickedPostion).getShortDescription());
+          //  loadNavigationDrawer();
         }
         else{
-            designNavigationViewDrawerLayout.setVisibility(View.GONE);
+          //  designNavigationViewDrawerLayout.setVisibility(View.GONE);
         }
 
 
@@ -148,7 +151,7 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
     }
 
 
-    @Override
+    /*@Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d("BakeryRecipiesVideoPl", "onActivityCreated Instance State" + savedInstanceState);
@@ -156,10 +159,12 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
             mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
             mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
             mTwoPane = savedInstanceState.getBoolean("INSTANCE_SAVED_TWO_PANE");
-        }
-    }
+            BakeryRecipeStepsVideoPlayerFragment bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayerFragment();
 
-    private void loadNavigationDrawer() {
+        }
+    }*/
+
+    /*private void loadNavigationDrawer() {
         actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), designNavigationViewDrawerLayout, navigationDrawerToolbar,
                 R.string.drawer_open, R.string.drawer_close);
         designNavigationViewDrawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -181,7 +186,7 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 for (int i = 0; i < navigationView.getMenu().size(); i++) {
                     if (menuItem == navigationView.getMenu().getItem(i)) {
-                        BakeryRecipeStepsVideoPlayer bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayer();
+                        BakeryRecipeStepsVideoPlayerFragment bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayerFragment();
                         Bundle bundle = new Bundle();
                         bundle.putInt("STEPS_CLICKED_POSITION", i);
                         bundle.putParcelableArrayList("VIDEO_STEPS_LIST", mBakeryStepsListBeans);
@@ -201,7 +206,7 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
                 return true;
             }
         });
-    }
+    }*/
 
 
 //    @Override
@@ -258,7 +263,7 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
 
 
         // MySessionCallback has methods that handle callbacks from a media controller.
-        mMediaSession.setCallback(new MySessionCallBack());
+        mMediaSession.setCallback(new BakeryRecipeStepsVideoPlayerActivity.MySessionCallBack());
 
         // Start the Media Session since the activity is active.
         mMediaSession.setActive(true);
@@ -268,13 +273,13 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
     @Override
     public void doBack() {
 
-        if (mTwoPane == false) {
+        /*if (mTwoPane == false) {
             if (designNavigationViewDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                 this.doubleBackToExitPressedOnce = false;
                 designNavigationViewDrawerLayout.closeDrawer(GravityCompat.START);
             }
-        }
-        getFragmentManager().popBackStack("CHOOSE_OPTION_LAYOUT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }*/
+      //  getFragmentManager().popBackStack("CHOOSE_OPTION_LAYOUT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
     }
  /*   @Override
@@ -314,7 +319,7 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
 
         // switch (item.getItemId()) {
 //            case R.id.navMenuHomePage: {
-        designNavigationViewDrawerLayout.openDrawer(GravityCompat.START);
+    //    designNavigationViewDrawerLayout.openDrawer(GravityCompat.START);
         NavUtils.navigateUpFromSameTask(getActivity());
         //   return true;
 //            }
@@ -412,12 +417,12 @@ public class BakeryRecipeStepsVideoPlayer extends Fragment implements Player.Eve
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Log.d("BakeryRecipiesVideoPl", "Config Change to LANDSCAPE");
             mRecipeVideoDescriptionTextView.setVisibility(View.GONE);
-            designNavigationViewDrawerLayout.setVisibility(View.GONE);
+       //     designNavigationViewDrawerLayout.setVisibility(View.GONE);
             mSimpleExoPlayerView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
 //
 // else {
-//            BakeryRecipeStepsVideoPlayer bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayer();
+//            BakeryRecipeStepsVideoPlayerFragment bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayerFragment();
 //        }
 
 

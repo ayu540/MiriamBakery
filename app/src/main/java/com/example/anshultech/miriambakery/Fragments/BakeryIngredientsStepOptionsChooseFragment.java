@@ -1,4 +1,4 @@
-package com.example.anshultech.miriambakery.Activities;
+package com.example.anshultech.miriambakery.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,16 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.anshultech.miriambakery.Activities.BakeryHome;
 import com.example.anshultech.miriambakery.Bean.BakeryIngridentsListBean;
 import com.example.anshultech.miriambakery.Bean.BakeryRecipiesListBean;
 import com.example.anshultech.miriambakery.Bean.BakeryStepsListBean;
+import com.example.anshultech.miriambakery.Fragments.BakerryRecipieDetailViewFragment;
 import com.example.anshultech.miriambakery.R;
 
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 
-public class BakeryIngredientsStepOptionsChoose extends Fragment implements BakeryHome.OnBackPressedListener {
+public class BakeryIngredientsStepOptionsChooseFragment extends Fragment implements BakeryHome.OnBackPressedListener {
 
     private Button mIngredientsButton;
     private Button mStepButton;
@@ -35,7 +37,7 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
     private boolean mTwoPane=false;
 
 
-    public BakeryIngredientsStepOptionsChoose() {
+    public BakeryIngredientsStepOptionsChooseFragment() {
     }
 
     @Override
@@ -49,7 +51,7 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-      //  ((BakeryShowViews)getActivity()).setOnBackPressedListener(BakeryIngredientsStepOptionsChoose.this);
+      //  ((BakeryShowViews)getActivity()).setOnBackPressedListener(BakeryIngredientsStepOptionsChooseFragment.this);
 
         View attachedRootView = inflater.inflate(R.layout.indridentasstepsclicklayout, container, false);
 
@@ -83,7 +85,7 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
 //    protected void onCreate(@Nullable Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.indridentasstepsclicklayout);
-//        mContext = BakeryIngredientsStepOptionsChoose.this;
+//        mContext = BakeryIngredientsStepOptionsChooseFragment.this;
 //
 //
 //    }
@@ -134,18 +136,18 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
     }
 
     private void loadNextActivity(Bundle bundle) {
-        BakerryRecipieDetailView bakerryRecipieDetailView = new BakerryRecipieDetailView();
-        bakerryRecipieDetailView.setArguments(bundle);
+        BakerryRecipieDetailViewFragment bakerryRecipieDetailViewFragment = new BakerryRecipieDetailViewFragment();
+        bakerryRecipieDetailViewFragment.setArguments(bundle);
         if (mTwoPane == true) {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager
                     .beginTransaction();
-            if (!bakerryRecipieDetailView.isAdded()) {
+            if (!bakerryRecipieDetailViewFragment.isAdded()) {
                 fragmentTransaction
-                        .replace(R.id.tabletViewFrameLayout, bakerryRecipieDetailView)
+                        .replace(R.id.tabletViewFrameLayout, bakerryRecipieDetailViewFragment)
                         .addToBackStack(null).commit();
             } else {
-                fragmentTransaction.show(bakerryRecipieDetailView);
+                fragmentTransaction.show(bakerryRecipieDetailViewFragment);
             }
 
 
@@ -155,7 +157,7 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
             FragmentTransaction fragmentTransaction = fragmentManager
                     .beginTransaction();
             fragmentTransaction
-                    .replace(R.id.frameLayoutPhoneOptionsDetails, bakerryRecipieDetailView)
+                    .replace(R.id.frameLayoutPhoneOptionsDetails, bakerryRecipieDetailViewFragment, "bakerryRecipieDetailViewFragment")
                     .addToBackStack(null).commit();
 
         }
@@ -163,7 +165,7 @@ public class BakeryIngredientsStepOptionsChoose extends Fragment implements Bake
 
     @Override
     public void doBack() {
-        getFragmentManager().popBackStack("CHOOSE_OPTION_LAYOUT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+       // getFragmentManager().popBackStack("CHOOSE_OPTION_LAYOUT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
 }

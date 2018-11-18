@@ -1,4 +1,4 @@
-package com.example.anshultech.miriambakery.Activities;
+package com.example.anshultech.miriambakery.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import com.example.anshultech.miriambakery.R;
 
 import java.util.ArrayList;
 
-public class BakerryRecipieDetailView extends Fragment {
+public class BakerryRecipieDetailViewFragment extends Fragment {
 
     private ArrayList<BakeryRecipiesListBean> mBakeryRecipiesListBeans;
     private ArrayList<BakeryIngridentsListBean> mBakeryIngridentsListBeans;
@@ -34,7 +34,7 @@ public class BakerryRecipieDetailView extends Fragment {
     private final int BAKERY_STEPS_CLICKED = 13;
     private boolean mTwoPane = false;
 
-    public BakerryRecipieDetailView() {
+    public BakerryRecipieDetailViewFragment() {
     }
 
     @Override
@@ -108,8 +108,8 @@ public class BakerryRecipieDetailView extends Fragment {
                                 bundle.putInt("STEPS_CLICKED_POSITION", position);
                                 bundle.putParcelableArrayList("VIDEO_STEPS_LIST", bakeryStepsListBeans);
                                 bundle.putBoolean("IS_TWO_PANE", mTwoPane);
-                                BakeryRecipeStepsVideoPlayer bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayer();
-                                bakeryRecipeStepsVideoPlayer.setArguments(bundle);
+                                BakeryRecipeStepsVideoPlayerFragment bakeryRecipeStepsVideoPlayerFragment = new BakeryRecipeStepsVideoPlayerFragment();
+                                bakeryRecipeStepsVideoPlayerFragment.setArguments(bundle);
                                 //  intent.putExtras(bundle);
                                 if (mTwoPane == true) {
 
@@ -117,12 +117,12 @@ public class BakerryRecipieDetailView extends Fragment {
                                     FragmentManager fragmentManager = getFragmentManager();
                                     FragmentTransaction fragmentTransaction = fragmentManager
                                             .beginTransaction();
-                                    if (!bakeryRecipeStepsVideoPlayer.isAdded()) {
+                                    if (!bakeryRecipeStepsVideoPlayerFragment.isAdded()) {
                                         fragmentTransaction
-                                                .replace(R.id.tabletViewFrameLayout, bakeryRecipeStepsVideoPlayer)
+                                                .replace(R.id.tabletViewFrameLayout, bakeryRecipeStepsVideoPlayerFragment)
                                                 .addToBackStack(null).commit();
                                     } else {
-                                        fragmentTransaction.show(bakeryRecipeStepsVideoPlayer);
+                                        fragmentTransaction.show(bakeryRecipeStepsVideoPlayerFragment);
                                     }
 
 
@@ -132,7 +132,7 @@ public class BakerryRecipieDetailView extends Fragment {
                                     FragmentTransaction fragmentTransaction = fragmentManager
                                             .beginTransaction();
                                     fragmentTransaction
-                                            .replace(R.id.frameLayoutPhoneOptionsDetails, bakeryRecipeStepsVideoPlayer)
+                                            .replace(R.id.frameLayoutPhoneOptionsDetails, bakeryRecipeStepsVideoPlayerFragment, "bakeryRecipeStepsVideoPlayerFragment")
                                             .addToBackStack(null).commit();
 
                                 }
