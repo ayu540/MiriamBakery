@@ -75,8 +75,6 @@ public class BakeryIngredientsStepOptionsChooseFragment extends Fragment impleme
         mStepButton = (Button) attachedRootView.findViewById(R.id.recipeOptyionChooseStepsButton);
 
 
-
-
         if (savedInstanceState != null) {
             mBakeryRecipiesListBeans = savedInstanceState.getParcelableArrayList("BAKERY_MASTER_LIST");
             mRecipeMasterListClickedPosition = savedInstanceState.getInt("CLICKED_POSITION");
@@ -152,7 +150,8 @@ public class BakeryIngredientsStepOptionsChooseFragment extends Fragment impleme
                     .beginTransaction();
             if (!bakerryRecipieDetailViewFragment.isAdded()) {
                 fragmentTransaction
-                        .replace(R.id.tabletViewFrameLayout, bakerryRecipieDetailViewFragment)
+                        .replace(R.id.tabletViewFrameLayout,
+                                bakerryRecipieDetailViewFragment, "bakerryRecipieDetailViewFragment")
                         .addToBackStack(null).commit();
             } else {
                 fragmentTransaction.show(bakerryRecipieDetailViewFragment);

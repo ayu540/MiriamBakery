@@ -18,6 +18,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.anshultech.miriambakery.Activities.BakeryHome;
@@ -52,13 +54,14 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Player.EventListener, BakeryHome.OnBackPressedListener {
+public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Player.EventListener {
 
     private SimpleExoPlayerView mSimpleExoPlayerView;
-    private SimpleExoPlayer mSimpleExoPlayer;
+    private static SimpleExoPlayer mSimpleExoPlayer;
     private Context mContext;
     private String videoUrl;
     private String longDescription;
@@ -77,6 +80,12 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
 //    private Toolbar navigationDrawerToolbar;
 //    private ActionBarDrawerToggle actionBarDrawerToggle;
     private boolean mTwoPane = false;
+    private long positionPlayer;
+    private boolean playWhenReady;
+    private ImageView recipeStepsVideoImageView;
+    private RecyclerView recipiesMasterListRecyclerView1;
+    private RecyclerView recipiesMasterListRecyclerView;
+
 
     public BakeryRecipeStepsVideoPlayerFragment() {
     }
@@ -106,40 +115,105 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
 
         mSimpleExoPlayerView = (SimpleExoPlayerView) attachedRootView.findViewById(R.id.recipeStepsVideoPlayerSimpleExoPlayer);
         mRecipeVideoDescriptionTextView = (TextView) attachedRootView.findViewById(R.id.recipeVideoDescriptionTextView);
+        recipeStepsVideoImageView = (ImageView) attachedRootView.findViewById(R.id.recipeStepsVideoImageView);
+        /*recipiesMasterListRecyclerView = (RecyclerView) attachedRootView.findViewById(R.id.recipiesMasterListRecyclerView);
+        BakeryHome bakeryHome = new BakeryHome();
+        bakeryHome.setmRecipiListRecyclerView(recipiesMasterListRecyclerView);
+        recipiesMasterListRecyclerView1 = bakeryHome.getmRecipiListRecyclerView(); */
+        View view = getActivity().findViewById(R.id.recipiesMasterListRecyclerView);
+        if (view instanceof RecyclerView) {
+            recipiesMasterListRecyclerView1 = (RecyclerView) view;
+        }
+
+        if (savedInstanceState != null) {
+            mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
+            mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
+            mTwoPane = savedInstanceState.getBoolean("INSTANCE_SAVED_TWO_PANE");
+
+            playWhenReady = savedInstanceState.getBoolean("INSTANCE_SAVED_PLAY_WHEN_READY");
+        }
 
 
-//        if (savedInstanceState != null) {
-//            mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
-//            mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
-//        }
+        if (mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL() != null) {
+            videoUrl = mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL();
+            if (mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL().equalsIgnoreCase("")) {
+                Log.d("BakeryViewActivty", "EMPTY URL");
+                mSimpleExoPlayerView.setVisibility(View.GONE);
+                recipeStepsVideoImageView.setVisibility(View.VISIBLE);
+                if (!mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL().equalsIgnoreCase("")) {
+                    //Load thumbnail if present
+                    Picasso.get().load((mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL())).into(recipeStepsVideoImageView);
+                    //Picasso.with(this).load((mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL()).into(recipeStepsVideoImageView);
+                } else {
+                    recipeStepsVideoImageView.setVisibility(View.GONE);
+                }
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
+                } else {
+                    hideUI();
+                    mSimpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mSimpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+                }
 
+            } else {
+                if (savedInstanceState != null) {
+                    //resuming by seeking to the last position
+                    positionPlayer = savedInstanceState.getLong("INSTANCE_SAVED_POSITION_PLAYER");
+                }
+                recipeStepsVideoImageView.setVisibility(View.GONE);
+                initializeMediaSession();
+                intializePlayer(Uri.parse(videoUrl));
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
+                } else {
+                    hideUI();
+                    mSimpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mSimpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+                }
 
-        mSimpleExoPlayerView.setVisibility(View.VISIBLE);
+            }
 
-        if (!mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL().equalsIgnoreCase("")) {
-            String videoUriToParse = mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL();
-            intializePlayer(Uri.parse(videoUriToParse));
-            initializeMediaSession();
         } else {
             mSimpleExoPlayerView.setVisibility(View.GONE);
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
+            } else {
+                hideUI();
+                mSimpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+                mSimpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+            }
+
         }
 
+     /*   getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
 
-        //navigation Drawer Layout
-
-//        designNavigationViewDrawerLayout = attachedRootView.findViewById(R.id.design_navigation_view);
-//        navigationView = attachedRootView.findViewById(R.id.navigationView);
-//        navigationDrawerToolbar = attachedRootView.findViewById(R.id.navigationDrawerToolbar);
-        //ActionBar actionBar = getSupportActionBar();
-        if (mTwoPane == false) {
-            //designNavigationViewDrawerLayout.setVisibility(View.VISIBLE);
-            mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
-            //    ((AppCompatActivity) getActivity()).setSupportActionBar(navigationDrawerToolbar);
-//            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mBakeryStepsListBeans.get(mVideosClickedPostion).getShortDescription());
-            //  loadNavigationDrawer();
-        } else {
-            //  designNavigationViewDrawerLayout.setVisibility(View.GONE);
-        }
+                Fragment fragment = getFragmentManager().findFragmentByTag("bakerryRecipieDetailViewFragment");
+                if (fragment instanceof BakerryRecipieDetailViewFragment) {
+                    // BakerryRecipieDetailViewFragment bakerryRecipieDetailViewFragment= (BakerryRecipieDetailViewFragment) fragment;
+                    BakerryRecipieDetailViewFragment bakerryRecipieDetailViewFragment = new BakerryRecipieDetailViewFragment();
+                    final Bundle bundle = new Bundle();
+                    bundle.putInt("CLICKED_POSITION", mVideosClickedPostion);
+                    bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryStepsListBeans);
+                    bundle.putBoolean("IS_TWO_PANE", mTwoPane);
+                    bundle.putParcelableArrayList("STEPS_LIST", mBakeryStepsListBeans);
+                    bundle.putString("LIST_TYPE", "Steps");
+                    bakerryRecipieDetailViewFragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager
+                            .beginTransaction();
+                    if (!bakerryRecipieDetailViewFragment.isAdded()) {
+                        fragmentTransaction
+                                .replace(R.id.tabletViewFrameLayout,
+                                        bakerryRecipieDetailViewFragment, "bakerryRecipieDetailViewFragment")
+                                .addToBackStack(null).commit();
+                    } else {
+                        fragmentTransaction.show(bakerryRecipieDetailViewFragment);
+                    }
+                }
+            }
+        });*/
 
 
         return attachedRootView;
@@ -151,90 +225,18 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
         outState.putInt("INSTANCE_SAVED_VIDEO_POSITION", mVideosClickedPostion);
         outState.putParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST", mBakeryStepsListBeans);
         outState.putBoolean("INSTANCE_SAVED_TWO_PANE", mTwoPane);
+        outState.putLong("INSTANCE_SAVED_POSITION_PLAYER", positionPlayer);
+        outState.putBoolean("INSTANCE_SAVED_PLAY_WHEN_READY", playWhenReady);
         Log.d("BakeryRecipiesVideoPl", "onSaveInstanceState Instance State" + outState);
     }
 
 
-    /*@Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d("BakeryRecipiesVideoPl", "onActivityCreated Instance State" + savedInstanceState);
-        if (savedInstanceState != null) {
-            mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
-            mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
-            mTwoPane = savedInstanceState.getBoolean("INSTANCE_SAVED_TWO_PANE");
-            BakeryRecipeStepsVideoPlayerFragment bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayerFragment();
-
-        }
-    }*/
-
-    /*private void loadNavigationDrawer() {
-        actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), designNavigationViewDrawerLayout, navigationDrawerToolbar,
-                R.string.drawer_open, R.string.drawer_close);
-        designNavigationViewDrawerLayout.addDrawerListener(actionBarDrawerToggle);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-        // ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_background);
-
-
-        //add menu items dynamically
-        Menu menu = navigationView.getMenu();
-        if (menu.size() == 0) {
-            for (int i = 0; i < mBakeryStepsListBeans.size(); i++) {
-                menu.add(mBakeryStepsListBeans.get(i).getShortDescription());
-            }
-        }
-
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                for (int i = 0; i < navigationView.getMenu().size(); i++) {
-                    if (menuItem == navigationView.getMenu().getItem(i)) {
-                        BakeryRecipeStepsVideoPlayerFragment bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayerFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("STEPS_CLICKED_POSITION", i);
-                        bundle.putParcelableArrayList("VIDEO_STEPS_LIST", mBakeryStepsListBeans);
-                        bundle.putBoolean("IS_TWO_PANE", mTwoPane);
-                        bakeryRecipeStepsVideoPlayer.setArguments(bundle);
-                        releasePlayer();
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager
-                                .beginTransaction();
-                        fragmentTransaction
-                                .replace(R.id.frameLayoutPhoneOptionsDetails, bakeryRecipeStepsVideoPlayer)
-                                .addToBackStack(null).commit();
-                    }
-                }
-                menuItem.setChecked(true);
-                designNavigationViewDrawerLayout.closeDrawers();
-                return true;
-            }
-        });
-    }*/
-
-
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        outState.putInt("INSTANCE_SAVED_VIDEO_POSITION", mVideosClickedPostion);
-//        outState.putParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST", mBakeryStepsListBeans);
-//        super.onSaveInstanceState(outState);
-//    }
-//
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
-//        mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
-//    }
-
     private void intializePlayer(Uri videoUri) {
         TrackSelector trackSelector = new DefaultTrackSelector();
         LoadControl loadControl = new DefaultLoadControl();
-        //ExoPlayerFactory.newSimpleInstance(mContext, trackSelector);
 
         RenderersFactory renderersFactory = new DefaultRenderersFactory(mContext);
         mSimpleExoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, loadControl);
-        //mSimpleExoPlayer = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
         mSimpleExoPlayerView.setPlayer(mSimpleExoPlayer);
         String userAgent = Util.getUserAgent(mContext, "MiriamBakery");
         MediaSource mediaSource = new ExtractorMediaSource(videoUri, new DefaultDataSourceFactory(mContext, userAgent),
@@ -274,62 +276,49 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
     }
 
 
-    @Override
-    public void doBack() {
-
-        /*if (mTwoPane == false) {
-            if (designNavigationViewDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                this.doubleBackToExitPressedOnce = false;
-                designNavigationViewDrawerLayout.closeDrawer(GravityCompat.START);
-            }
-        }*/
-        //  getFragmentManager().popBackStack("CHOOSE_OPTION_LAYOUT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
+    private void hideUI() {
+        if ((((AppCompatActivity) getActivity()).getSupportActionBar() != null)) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+            recipiesMasterListRecyclerView1.setVisibility(View.GONE);
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        }
     }
- /*   @Override
-    public void onBackPressed() {
-        //   super.onBackPressed();
 
-
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                doubleBackToExitPressedOnce=false;
-//            }
-//        }, 2000);
-
-
-    }*/
 
     @Override
     public void onPause() {
         super.onPause();
- /*       if (mSimpleExoPlayer != null) {
-            releasePlayer();
-        }*/
+        if (mSimpleExoPlayer != null) {
+            positionPlayer = mSimpleExoPlayer.getContentPosition();
+            playWhenReady = mSimpleExoPlayer.getPlayWhenReady();
+            mSimpleExoPlayer.stop();
+            mSimpleExoPlayer.release();
+            mSimpleExoPlayer = null;
+
+        }
+
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-   /*     if (mSimpleExoPlayer != null) {
-            releasePlayer();
-        }*/
-    }
+    public void onResume() {
+        super.onResume();
+        if (mSimpleExoPlayer != null) {
+            mSimpleExoPlayer.setPlayWhenReady(playWhenReady);
+            mSimpleExoPlayer.seekTo(positionPlayer);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+        } else {
+            initializeMediaSession();
+            intializePlayer(Uri.parse(videoUrl));
+            mSimpleExoPlayer.setPlayWhenReady(playWhenReady);
+            mSimpleExoPlayer.seekTo(positionPlayer);
+        }
 
-        // switch (item.getItemId()) {
-//            case R.id.navMenuHomePage: {
-        //    designNavigationViewDrawerLayout.openDrawer(GravityCompat.START);
-        NavUtils.navigateUpFromSameTask(getActivity());
-        //   return true;
-//            }
-//        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -339,9 +328,11 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
     }
 
     private void releasePlayer() {
-        mSimpleExoPlayer.stop();
-        mSimpleExoPlayer.release();
-        mSimpleExoPlayer = null;
+        if (mSimpleExoPlayer != null) {
+            mSimpleExoPlayer.stop();
+            mSimpleExoPlayer.release();
+            mSimpleExoPlayer = null;
+        }
     }
 
     @Override
@@ -404,33 +395,61 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
-//    @Override
-//    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-//        super.onPostCreate(savedInstanceState);
-//        actionBarDrawerToggle.syncState();
-//    }
+    public static class MySessionCallBack extends MediaSessionCompat.Callback {
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Log.d("BakeryRecipiesVideoPl", "Config Change to LANDSCAPE");
-            mRecipeVideoDescriptionTextView.setVisibility(View.GONE);
-            //     designNavigationViewDrawerLayout.setVisibility(View.GONE);
-            mSimpleExoPlayerView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        public MySessionCallBack() {
         }
-//
-// else {
-//            BakeryRecipeStepsVideoPlayerFragment bakeryRecipeStepsVideoPlayer = new BakeryRecipeStepsVideoPlayerFragment();
-//        }
 
+        @Override
+        public void onPrepare() {
+            super.onPrepare();
 
+        }
+
+        @Override
+        public void onPlay() {
+            super.onPlay();
+            mSimpleExoPlayer.setPlayWhenReady(true);
+
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            mSimpleExoPlayer.setPlayWhenReady(false);
+        }
+
+        @Override
+        public void onSkipToNext() {
+            super.onSkipToNext();
+        }
+
+        @Override
+        public void onSkipToPrevious() {
+            super.onSkipToPrevious();
+            mSimpleExoPlayer.seekTo(0);
+        }
+
+        @Override
+        public void onFastForward() {
+            super.onFastForward();
+        }
+
+        @Override
+        public void onRewind() {
+            super.onRewind();
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+        }
+
+        @Override
+        public void onSeekTo(long pos) {
+            super.onSeekTo(pos);
+        }
     }
-
 
 }

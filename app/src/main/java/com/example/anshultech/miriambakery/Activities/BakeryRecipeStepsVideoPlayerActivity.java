@@ -156,13 +156,6 @@ public class BakeryRecipeStepsVideoPlayerActivity extends AppCompatActivity impl
         Log.d("BakeryRecipiesVideoPl", "onSaveInstanceState Instance State" + outState);
     }
 
-/*    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
-        mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
-        mTwoPane = savedInstanceState.getBoolean("INSTANCE_SAVED_TWO_PANE");
-        super.onRestoreInstanceState(savedInstanceState);
-    }*/
 
     private void hideUI() {
         if ((getSupportActionBar() != null)) {
@@ -270,20 +263,6 @@ public class BakeryRecipeStepsVideoPlayerActivity extends AppCompatActivity impl
             mSimpleExoPlayer = null;
         }
     }
-
-  /*  @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Log.d("BakeryRecipiesVideoPl", "Config Change to LANDSCAPE");
-            mRecipeVideoDescriptionTextView.setVisibility(View.GONE);
-            isConfigChngLandscape = true;
-            //   mHorizontalHalfGuideline.setVisibility(View.GONE);
-
-            //     designNavigationViewDrawerLayout.setVisibility(View.GONE);
-            mSimpleExoPlayerView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        }
-    }*/
 
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {

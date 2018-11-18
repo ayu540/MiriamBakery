@@ -39,6 +39,9 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
     private OnBackPressedListener onBackPressedListener;
     private boolean doubleBackToExitPressedOnce = false;
 
+    public BakeryHome() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +49,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
         mContext = BakeryHome.this;
         mRecipiListRecyclerView = (RecyclerView) findViewById(R.id.recipiesMasterListRecyclerView);
         mRecipiListRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        setmRecipiListRecyclerView(mRecipiListRecyclerView);
 
         tabletViewFrameLayout = (FrameLayout) findViewById(R.id.tabletViewFrameLayout);
 
@@ -109,7 +113,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                                                     .beginTransaction();
                                             if (!bakeryIngredientsStepOptionsChooseFragment.isAdded()) {
                                                 fragmentTransaction
-                                                        .replace(R.id.tabletViewFrameLayout, bakeryIngredientsStepOptionsChooseFragment)
+                                                        .replace(R.id.tabletViewFrameLayout, bakeryIngredientsStepOptionsChooseFragment,"bakeryIngredientsStepOptionsChooseFragment")
                                                         .addToBackStack(null).commit();
                                             } else {
                                                 fragmentTransaction.show(bakeryIngredientsStepOptionsChooseFragment);
@@ -175,5 +179,13 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
 
     public interface OnBackPressedListener {
         public void doBack();
+    }
+
+    public RecyclerView getmRecipiListRecyclerView() {
+        return mRecipiListRecyclerView;
+    }
+
+    public void setmRecipiListRecyclerView(RecyclerView mRecipiListRecyclerView) {
+        this.mRecipiListRecyclerView = mRecipiListRecyclerView;
     }
 }

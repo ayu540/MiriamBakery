@@ -75,9 +75,18 @@ public class BakerryRecipieDetailViewFragment extends Fragment {
         loadRecipieListItems();
 
 
+
         return rootView;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("INSTANCE_BAKERY_MASTER_LIST", mBakeryRecipiesListBeans);
+        outState.putInt("INSTANCE_CLICKED_POSITION", mRecipeMasterListClickedPosition);
+        outState.putString("INSTANCE_LIST_TYPE", RECIPE_LIST_TYPE);
+        outState.putBoolean("INSTANCE_IS_TWO_PANE", mTwoPane);
+    }
 
     private void loadRecipieListItems() {
 
@@ -123,7 +132,7 @@ public class BakerryRecipieDetailViewFragment extends Fragment {
                                             .beginTransaction();
                                     if (!bakeryRecipeStepsVideoPlayerFragment.isAdded()) {
                                         fragmentTransaction
-                                                .replace(R.id.tabletViewFrameLayout, bakeryRecipeStepsVideoPlayerFragment)
+                                                .replace(R.id.tabletViewFrameLayout, bakeryRecipeStepsVideoPlayerFragment, "bakeryRecipeStepsVideoPlayerFragment")
                                                 .addToBackStack(null).commit();
                                     } else {
                                         fragmentTransaction.show(bakeryRecipeStepsVideoPlayerFragment);
@@ -136,7 +145,8 @@ public class BakerryRecipieDetailViewFragment extends Fragment {
                                     FragmentTransaction fragmentTransaction = fragmentManager
                                             .beginTransaction();
                                     fragmentTransaction
-                                            .replace(R.id.frameLayoutPhoneOptionsDetails, bakeryRecipeStepsVideoPlayerFragment, "bakeryRecipeStepsVideoPlayerFragment")
+                                            .replace(R.id.frameLayoutPhoneOptionsDetails,
+                                                    bakeryRecipeStepsVideoPlayerFragment, "bakeryRecipeStepsVideoPlayerFragment")
                                             .addToBackStack(null).commit();
 
                                 }
