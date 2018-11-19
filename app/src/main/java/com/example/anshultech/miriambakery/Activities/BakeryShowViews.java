@@ -66,11 +66,11 @@ public class BakeryShowViews extends AppCompatActivity {
             FragmentManager fragManager = this.getSupportFragmentManager();
             int count = this.getSupportFragmentManager().getBackStackEntryCount();
             Fragment frag = fragManager.getFragments().get(count>0?count-1:count);
-          //  if (bakeryRecipeStepsVideoPlayerFragment1 != null) {
+            //  if (bakeryRecipeStepsVideoPlayerFragment1 != null) {
 
                 /*String tag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
                 getSupportFragmentManager().findFragmentByTag(tag);*/
-         //   }
+            //   }
 
         } else {
             FragmentManager fragmentManager = getSupportFragmentManager();

@@ -18,6 +18,7 @@ import com.example.anshultech.miriambakery.Adapters.BakeryRecipiesListRecyclerVi
 import com.example.anshultech.miriambakery.Bean.BakeryRecipiesListBean;
 import com.example.anshultech.miriambakery.Connection.ConnectionURL;
 import com.example.anshultech.miriambakery.Connection.VolleyConnectionClass;
+import com.example.anshultech.miriambakery.Fragments.BakerryRecipieDetailViewFragment;
 import com.example.anshultech.miriambakery.Fragments.BakeryIngredientsStepOptionsChooseFragment;
 import com.example.anshultech.miriambakery.R;
 import com.google.gson.Gson;
@@ -37,7 +38,10 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
     private FrameLayout tabletViewFrameLayout;
     private boolean mTwoPane = false;
     private OnBackPressedListener onBackPressedListener;
+    private OnBackOptionChoosePressedListener onBackOptionChoosePressedListener;
     private boolean doubleBackToExitPressedOnce = false;
+
+    ArrayList<BakeryRecipiesListBean> mBakeryRecipiesArrayListBeans;
 
     public BakeryHome() {
     }
@@ -49,7 +53,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
         mContext = BakeryHome.this;
         mRecipiListRecyclerView = (RecyclerView) findViewById(R.id.recipiesMasterListRecyclerView);
         mRecipiListRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        setmRecipiListRecyclerView(mRecipiListRecyclerView);
+        mBakeryRecipiesArrayListBeans = new ArrayList<BakeryRecipiesListBean>();
 
         tabletViewFrameLayout = (FrameLayout) findViewById(R.id.tabletViewFrameLayout);
 
@@ -74,7 +78,6 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                     public void onResponse(JSONArray response) {
                         if (response != null) {
                             Gson gson = new Gson();
-                            ArrayList<BakeryRecipiesListBean> bakeryRecipiesListBeans = new ArrayList<BakeryRecipiesListBean>();
 
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject jsonObject = new JSONObject();
@@ -82,25 +85,25 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                                     jsonObject = response.getJSONObject(i);
                                     BakeryRecipiesListBean bakeryRecipiesListBean = gson.fromJson(jsonObject.toString(), BakeryRecipiesListBean.class);
                                     int a = jsonObject.getInt("id");
-                                    bakeryRecipiesListBeans.add(bakeryRecipiesListBean);
+                                    mBakeryRecipiesArrayListBeans.add(bakeryRecipiesListBean);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
 
                             }
-                            if (bakeryRecipiesListBeans != null || bakeryRecipiesListBeans.size() > 0) {
+                            if (mBakeryRecipiesArrayListBeans != null || mBakeryRecipiesArrayListBeans.size() > 0) {
                                 mBakeryRecipiesListRecyclerViewAdapter = new BakeryRecipiesListRecyclerViewAdapter(mContext,
-                                        bakeryRecipiesListBeans, new BakeryRecipiesListRecyclerViewAdapter.BakeryRecipiesListOnClickListener() {
+                                        mBakeryRecipiesArrayListBeans, new BakeryRecipiesListRecyclerViewAdapter.BakeryRecipiesListOnClickListener() {
                                     @Override
-                                    public void onRecipiesClickItem(int position, ArrayList<BakeryRecipiesListBean> bakeryRecipiesListBeans) {
+                                    public void onRecipiesClickItem(int position, ArrayList<BakeryRecipiesListBean> lBakeryRecipiesListBeans) {
 
 
                                         //Intent intent = new Intent();
                                         Bundle bundle = new Bundle();
                                         bundle.putInt("CLICKED_POSITION", position);
-                                        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", bakeryRecipiesListBeans);
-                                        bundle.putParcelableArrayList("INGREDINET_LIST", bakeryRecipiesListBeans.get(position).getBakeryIngridentsListBeans());
-                                        bundle.putParcelableArrayList("STEPS_LIST", bakeryRecipiesListBeans.get(position).getBakeryStepsListBeans());
+                                        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", lBakeryRecipiesListBeans);
+                                        bundle.putParcelableArrayList("INGREDINET_LIST", lBakeryRecipiesListBeans.get(position).getBakeryIngridentsListBeans());
+                                        bundle.putParcelableArrayList("STEPS_LIST", lBakeryRecipiesListBeans.get(position).getBakeryStepsListBeans());
                                         bundle.putBoolean("IS_TWO_PANE", mTwoPane);
                                         BakeryIngredientsStepOptionsChooseFragment bakeryIngredientsStepOptionsChooseFragment = new BakeryIngredientsStepOptionsChooseFragment();
                                         bakeryIngredientsStepOptionsChooseFragment.setArguments(bundle);
@@ -113,7 +116,8 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                                                     .beginTransaction();
                                             if (!bakeryIngredientsStepOptionsChooseFragment.isAdded()) {
                                                 fragmentTransaction
-                                                        .replace(R.id.tabletViewFrameLayout, bakeryIngredientsStepOptionsChooseFragment,"bakeryIngredientsStepOptionsChooseFragment")
+                                                        .replace(R.id.tabletViewFrameLayout,
+                                                                bakeryIngredientsStepOptionsChooseFragment, "bakeryIngredientsStepOptionsChooseFragment")
                                                         .addToBackStack(null).commit();
                                             } else {
                                                 fragmentTransaction.show(bakeryIngredientsStepOptionsChooseFragment);
@@ -150,10 +154,25 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
         VolleyConnectionClass.getInstance(mContext).addToRequestQueue(jsonArrayRequest);
     }
 
+
+   /* @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("", mBakeryRecipiesArrayListBeans);
+
+
+
+        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryRecipiesArrayListBeans);
+        bundle.putParcelableArrayList("INGREDINET_LIST", mBakeryRecipiesArrayListBeans.get(position).getBakeryIngridentsListBeans());
+        bundle.putParcelableArrayList("STEPS_LIST", mBakeryRecipiesArrayListBeans.get(position).getBakeryStepsListBeans());
+        bundle.putBoolean("IS_TWO_PANE", mTwoPane);
+
+    }*/
+
     @Override
     public void onBackPressed() {
         /*if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
+            super.forDetailsPageBackPressed();
             finish();
             return;
         }
@@ -161,15 +180,30 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();*/
 
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        //      Fragment currentFragment = getSupportFragmentManager().getFragments().get(getSupportFragmentManager().getBackStackEntryCount());
         if (onBackPressedListener != null) {
-            onBackPressedListener.doBack();
+
+            if (getSupportFragmentManager().findFragmentByTag("bakerryRecipieDetailViewFragment") instanceof BakerryRecipieDetailViewFragment) {
+                onBackPressedListener.forDetailsPageBackPressed(count);
+            }
+        } else if (onBackOptionChoosePressedListener != null) {
+            if (getSupportFragmentManager().findFragmentByTag("bakeryIngredientsStepOptionsChooseFragment") instanceof BakeryIngredientsStepOptionsChooseFragment) {
+                onBackOptionChoosePressedListener.forOptionChooseBackPressed(count);
+            }
+
         } else {
             super.onBackPressed();
         }
+
     }
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
+    }
+
+    public void setOnOptionChooseBackPressedListener(OnBackOptionChoosePressedListener onOptionChooseBackPressedListener) {
+        this.onBackOptionChoosePressedListener = onOptionChooseBackPressedListener;
     }
 
     @Override
@@ -178,14 +212,12 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
     }
 
     public interface OnBackPressedListener {
-        public void doBack();
+        public void forDetailsPageBackPressed(int currentFragmentCount);
     }
 
-    public RecyclerView getmRecipiListRecyclerView() {
-        return mRecipiListRecyclerView;
+    public interface OnBackOptionChoosePressedListener {
+
+        public void forOptionChooseBackPressed(int currentFragmentCount);
     }
 
-    public void setmRecipiListRecyclerView(RecyclerView mRecipiListRecyclerView) {
-        this.mRecipiListRecyclerView = mRecipiListRecyclerView;
-    }
 }

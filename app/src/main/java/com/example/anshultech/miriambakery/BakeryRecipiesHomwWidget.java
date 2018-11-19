@@ -67,4 +67,3 @@ public class BakeryRecipiesHomwWidget extends AppWidgetProvider {
 
 
 }
-

@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 
-public class BakeryIngredientsStepOptionsChooseFragment extends Fragment implements BakeryHome.OnBackPressedListener {
+public class BakeryIngredientsStepOptionsChooseFragment extends Fragment {
 
     private Button mIngredientsButton;
     private Button mStepButton;
@@ -35,6 +37,7 @@ public class BakeryIngredientsStepOptionsChooseFragment extends Fragment impleme
     private int mRecipeMasterListClickedPosition;
     private final int RECIPIE_CHOOSER_LIST_CODE = 12;
     private boolean mTwoPane = false;
+    private RecyclerView recipiesMasterListRecyclerView1;
 
 
     public BakeryIngredientsStepOptionsChooseFragment() {
@@ -80,13 +83,32 @@ public class BakeryIngredientsStepOptionsChooseFragment extends Fragment impleme
             mRecipeMasterListClickedPosition = savedInstanceState.getInt("CLICKED_POSITION");
             mBakeryIngridentsListBeans = savedInstanceState.getParcelableArrayList("INGREDINET_LIST");
             mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("STEPS_LIST");
-            mTwoPane = getArguments().getBoolean("IS_TWO_PANE");
+            mTwoPane = savedInstanceState.getBoolean("IS_TWO_PANE");
         }
+        View view = getActivity().findViewById(R.id.recipiesMasterListRecyclerView);
+        if (view instanceof RecyclerView) {
+            recipiesMasterListRecyclerView1 = (RecyclerView) view;
+            recipiesMasterListRecyclerView1.setVisibility(View.VISIBLE);
+        }
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+
         prepareRecipieButtonData();
 
         return attachedRootView;
     }
-//
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryRecipiesListBeans);
+        outState.putInt("CLICKED_POSITION", mRecipeMasterListClickedPosition);
+        outState.putParcelableArrayList("INGREDINET_LIST", mBakeryIngridentsListBeans);
+        outState.putParcelableArrayList("STEPS_LIST", mBakeryStepsListBeans);
+        outState.putBoolean("IS_TWO_PANE", mTwoPane);
+    }
+
+
+    //
 //    @Override
 //    protected void onCreate(@Nullable Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
@@ -97,7 +119,7 @@ public class BakeryIngredientsStepOptionsChooseFragment extends Fragment impleme
 //    }
 
 
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         //  super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
@@ -111,7 +133,7 @@ public class BakeryIngredientsStepOptionsChooseFragment extends Fragment impleme
                 prepareRecipieButtonData();
             }
         }
-    }
+    }*/
 
     private void prepareRecipieButtonData() {
 
@@ -172,9 +194,9 @@ public class BakeryIngredientsStepOptionsChooseFragment extends Fragment impleme
         }*/
     }
 
-    @Override
+   /* @Override
     public void doBack() {
         // getFragmentManager().popBackStack("CHOOSE_OPTION_LAYOUT", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    }
+    }*/
 
 }

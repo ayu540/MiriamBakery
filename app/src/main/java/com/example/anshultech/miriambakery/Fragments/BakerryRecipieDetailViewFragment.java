@@ -7,17 +7,21 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.anshultech.miriambakery.Activities.BakeryHome;
 import com.example.anshultech.miriambakery.Adapters.BakeryDetailsRecyclerViewAdapter;
 import com.example.anshultech.miriambakery.Bean.BakeryIngridentsListBean;
 import com.example.anshultech.miriambakery.Bean.BakeryRecipiesListBean;
 import com.example.anshultech.miriambakery.Bean.BakeryStepsListBean;
 import com.example.anshultech.miriambakery.R;
+import com.example.anshultech.miriambakery.Utilities.BakeryChooseOptionBackPressedListener;
+import com.example.anshultech.miriambakery.Utilities.BaseBackPressedListener;
 
 import java.util.ArrayList;
 
@@ -33,6 +37,7 @@ public class BakerryRecipieDetailViewFragment extends Fragment {
     private String RECIPE_LIST_TYPE;
     private final int BAKERY_STEPS_CLICKED = 13;
     private boolean mTwoPane = false;
+    private RecyclerView recipiesMasterListRecyclerView1;
 
     public BakerryRecipieDetailViewFragment() {
     }
@@ -65,15 +70,23 @@ public class BakerryRecipieDetailViewFragment extends Fragment {
         mRecipiDetailsViewRecyClerView.setLayoutManager(new LinearLayoutManager(mContext));
 
         if (savedInstanceState != null) {
-            mBakeryRecipiesListBeans = savedInstanceState.getParcelableArrayList("BAKERY_MASTER_LIST");
-            mRecipeMasterListClickedPosition = savedInstanceState.getInt("CLICKED_POSITION");
-            RECIPE_LIST_TYPE = savedInstanceState.getString("LIST_TYPE");
-            mTwoPane = savedInstanceState.getBoolean("IS_TWO_PANE");
+            mBakeryRecipiesListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_BAKERY_MASTER_LIST");
+            mRecipeMasterListClickedPosition = savedInstanceState.getInt("INSTANCE_CLICKED_POSITION");
+            RECIPE_LIST_TYPE = savedInstanceState.getString("INSTANCE_LIST_TYPE");
+            mTwoPane = savedInstanceState.getBoolean("INSTANCE_IS_TWO_PANE");
         }
 
+        ((BakeryHome)getActivity()).setOnOptionChooseBackPressedListener(new BakeryChooseOptionBackPressedListener(getActivity(),
+                mBakeryRecipiesListBeans, mRecipeMasterListClickedPosition, mTwoPane));
+
+        View view = getActivity().findViewById(R.id.recipiesMasterListRecyclerView);
+        if (view instanceof RecyclerView) {
+            recipiesMasterListRecyclerView1 = (RecyclerView) view;
+            recipiesMasterListRecyclerView1.setVisibility(View.VISIBLE);
+        }
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 
         loadRecipieListItems();
-
 
 
         return rootView;
@@ -139,7 +152,8 @@ public class BakerryRecipieDetailViewFragment extends Fragment {
                                     }
 
 
-                                } else {
+                                }
+                                /* else {
 
                                     FragmentManager fragmentManager = getFragmentManager();
                                     FragmentTransaction fragmentTransaction = fragmentManager
@@ -149,7 +163,7 @@ public class BakerryRecipieDetailViewFragment extends Fragment {
                                                     bakeryRecipeStepsVideoPlayerFragment, "bakeryRecipeStepsVideoPlayerFragment")
                                             .addToBackStack(null).commit();
 
-                                }
+                                }*/
 
                             }
                         }, RECIPE_LIST_TYPE
@@ -163,16 +177,16 @@ public class BakerryRecipieDetailViewFragment extends Fragment {
 
 //
 //    @Override
-//    public void onBackPressed() {
+//    public void forDetailsPageBackPressed() {
 //        int count = getFragmentManager().getBackStackEntryCount();
 //
 //        if (count == 0) {
-//            super.onBackPressed();
+//            super.forDetailsPageBackPressed();
 //            //additional code
 //        } else {
 //            getFragmentManager().popBackStack();
 //        }
-//        //super.onBackPressed();
+//        //super.forDetailsPageBackPressed();
 //        Intent bakeryStepsReturnIntent = getActivity().getIntent();
 //        Bundle bundle = new Bundle();
 //        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryRecipiesListBeans);
