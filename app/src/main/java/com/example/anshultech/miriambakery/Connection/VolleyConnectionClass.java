@@ -1,6 +1,8 @@
 package com.example.anshultech.miriambakery.Connection;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -25,7 +27,7 @@ public class VolleyConnectionClass {
     private static VolleyConnectionClass mInstance;
     private RequestQueue mRequestQueue;
     private static Context mContext;
-    private NetworkConnectionInferface networkConnectionInferface;
+    private NetworkConnectionInferface mNetworkConnectionInferface;
 
     private VolleyConnectionClass(Context context) {
         mContext = context;
@@ -110,11 +112,25 @@ public class VolleyConnectionClass {
     }
 
 
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
+    public <T> void addToRequestQueue(Request<T> req, NetworkConnectionInferface networkConnectionInferface) {
+        mNetworkConnectionInferface= networkConnectionInferface;
+        boolean netwoekChecking= checkNetworkAccess();
+        if(netwoekChecking==true) {
+            getRequestQueue().add(req);
+        }
+        else {
+            mNetworkConnectionInferface.isNetworkAvailable();
+        }
     }
 
     public interface NetworkConnectionInferface {
         void isNetworkAvailable();
+    }
+
+    private boolean checkNetworkAccess() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

@@ -168,7 +168,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                 }
         );
 
-        VolleyConnectionClass.getInstance(mContext).addToRequestQueue(jsonArrayRequest);
+        VolleyConnectionClass.getInstance(mContext).addToRequestQueue(jsonArrayRequest, this);
     }
 
 
@@ -200,6 +200,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
 
     @Override
     public void isNetworkAvailable() {
+        Toast.makeText(mContext, "Network not Available, please ccheck your internet connection", Toast.LENGTH_SHORT).show();
 
     }
 

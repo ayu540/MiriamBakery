@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class BakeryDataLoadWidgetService extends IntentService {
+public class BakeryDataLoadWidgetService extends IntentService implements VolleyConnectionClass.NetworkConnectionInferface {
 
     public static final String ACTION_LOAD_HOME_DATA = "com.example.anshultech.miriambakery.action.load_home_data";
     private static Context mContext;
@@ -84,7 +85,7 @@ public class BakeryDataLoadWidgetService extends IntentService {
                             if (mBakeryRecipiesArrayListBeans != null || mBakeryRecipiesArrayListBeans.size() > 0) {
                                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
                                 int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(mContext, WidgetBakeryRecipieHome.class));
-                                //Trigger data update to handle the GridView widgets and force a data refresh
+                                //Trigger data update to handle the ListView widgets and force a data refresh
                                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
                                 WidgetBakeryRecipieHome.updateBakeryRecipieWidgets(mContext, appWidgetManager, mBakeryRecipiesArrayListBeans, appWidgetIds);
                             }
@@ -99,7 +100,11 @@ public class BakeryDataLoadWidgetService extends IntentService {
                     }
                 }
         );
-        VolleyConnectionClass.getInstance(mContext).addToRequestQueue(jsonArrayRequest);
+        VolleyConnectionClass.getInstance(mContext).addToRequestQueue(jsonArrayRequest, this);
     }
 
+    @Override
+    public void isNetworkAvailable() {
+        Toast.makeText(mContext, "Network not Available, please check your internet connection", Toast.LENGTH_SHORT).show();
+    }
 }
