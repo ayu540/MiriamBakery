@@ -79,30 +79,27 @@ public class BakeryRecipeStepsVideoPlayerActivity extends AppCompatActivity impl
         mBakeryStepsListBeans = new ArrayList<BakeryStepsListBean>();
 
         if (getIntent() != null) {
-            mVideosClickedPostion = getIntent().getExtras().getInt("STEPS_CLICKED_POSITION");
-            mBakeryStepsListBeans = getIntent().getExtras().getParcelableArrayList("VIDEO_STEPS_LIST");
-            mTwoPane = getIntent().getExtras().getBoolean("IS_TWO_PANE");
+            mVideosClickedPostion = getIntent().getExtras().getInt(getResources().getString(R.string.steps_clicked_position));
+            mBakeryStepsListBeans = getIntent().getExtras().getParcelableArrayList(getResources().getString(R.string.video_steps_list));
+            mTwoPane = getIntent().getExtras().getBoolean(getResources().getString(R.string.is_two_pane));
         }
 
         if (savedInstanceState != null) {
-            mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
-            mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
-            mTwoPane = savedInstanceState.getBoolean("INSTANCE_SAVED_TWO_PANE");
-
-            playWhenReady = savedInstanceState.getBoolean("INSTANCE_SAVED_PLAY_WHEN_READY");
+            mVideosClickedPostion = savedInstanceState.getInt(getResources().getString(R.string.instance_saved_video_position));
+            mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList(getResources().getString(R.string.instance_saved_video_list));
+            mTwoPane = savedInstanceState.getBoolean(getResources().getString(R.string.instance_saved_two_pane));
+            playWhenReady = savedInstanceState.getBoolean(getResources().getString(R.string.instance_saved_play_when_ready));
         }
 
 
         if (mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL() != null) {
             videoUrl = mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL();
             if (mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL().equalsIgnoreCase("")) {
-                Log.d("BakeryViewActivty", "EMPTY URL");
                 mSimpleExoPlayerView.setVisibility(View.GONE);
                 recipeStepsVideoImageView.setVisibility(View.VISIBLE);
                 if (!mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL().equalsIgnoreCase("")) {
                     //Load thumbnail if present
                     Picasso.get().load((mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL())).into(recipeStepsVideoImageView);
-                    //Picasso.with(this).load((mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL()).into(recipeStepsVideoImageView);
                 } else {
                     recipeStepsVideoImageView.setVisibility(View.GONE);
                 }
@@ -117,7 +114,7 @@ public class BakeryRecipeStepsVideoPlayerActivity extends AppCompatActivity impl
             } else {
                 if (savedInstanceState != null) {
                     //resuming by seeking to the last position
-                    positionPlayer = savedInstanceState.getLong("INSTANCE_SAVED_POSITION_PLAYER");
+                    positionPlayer = savedInstanceState.getLong(getResources().getString(R.string.instance_saved_position_player));
                 }
                 recipeStepsVideoImageView.setVisibility(View.GONE);
                 initializeMediaSession();
@@ -148,12 +145,11 @@ public class BakeryRecipeStepsVideoPlayerActivity extends AppCompatActivity impl
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("INSTANCE_SAVED_VIDEO_POSITION", mVideosClickedPostion);
-        outState.putParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST", mBakeryStepsListBeans);
-        outState.putBoolean("INSTANCE_SAVED_TWO_PANE", mTwoPane);
-        outState.putLong("INSTANCE_SAVED_POSITION_PLAYER", positionPlayer);
-        outState.putBoolean("INSTANCE_SAVED_PLAY_WHEN_READY", playWhenReady);
-        Log.d("BakeryRecipiesVideoPl", "onSaveInstanceState Instance State" + outState);
+        outState.putInt(getResources().getString(R.string.instance_saved_video_position), mVideosClickedPostion);
+        outState.putParcelableArrayList(getResources().getString(R.string.instance_saved_video_list), mBakeryStepsListBeans);
+        outState.putBoolean(getResources().getString(R.string.instance_saved_two_pane), mTwoPane);
+        outState.putLong(getResources().getString(R.string.instance_saved_position_player), positionPlayer);
+        outState.putBoolean(getResources().getString(R.string.instance_saved_play_when_ready), playWhenReady);
     }
 
 
@@ -174,11 +170,9 @@ public class BakeryRecipeStepsVideoPlayerActivity extends AppCompatActivity impl
     private void intializePlayer(Uri videoUri) {
         TrackSelector trackSelector = new DefaultTrackSelector();
         LoadControl loadControl = new DefaultLoadControl();
-        //ExoPlayerFactory.newSimpleInstance(mContext, trackSelector);
 
         RenderersFactory renderersFactory = new DefaultRenderersFactory(mContext);
         mSimpleExoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, loadControl);
-        //mSimpleExoPlayer = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
         mSimpleExoPlayerView.setPlayer(mSimpleExoPlayer);
         String userAgent = Util.getUserAgent(mContext, "MiriamBakery");
         MediaSource mediaSource = new ExtractorMediaSource(videoUri, new DefaultDataSourceFactory(mContext, userAgent),

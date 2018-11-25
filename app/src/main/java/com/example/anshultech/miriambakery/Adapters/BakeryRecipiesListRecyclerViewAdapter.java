@@ -27,7 +27,6 @@ public class BakeryRecipiesListRecyclerViewAdapter extends RecyclerView.Adapter<
         this.mBakeryRecipiesListOnClickListener = bakeryRecipiesListOnClickListener;
     }
 
-
     @NonNull
     @Override
     public BakeryRecipiesListHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -44,7 +43,7 @@ public class BakeryRecipiesListRecyclerViewAdapter extends RecyclerView.Adapter<
 
         if (mBakeryRecipiesListBeans.get(position).getImage() != null) {
             String imageSource = mBakeryRecipiesListBeans.get(position).getImage().toString();
-            if(!imageSource.equalsIgnoreCase("")) {
+            if (!imageSource.equalsIgnoreCase("")) {
                 Picasso.get().load(imageSource).into(holder.recipiMasterListImageView);
             }
         }

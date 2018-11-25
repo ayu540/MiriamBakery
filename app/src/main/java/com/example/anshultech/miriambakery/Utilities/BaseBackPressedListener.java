@@ -30,16 +30,13 @@ public class BaseBackPressedListener implements BakeryHome.OnBackPressedListener
 
     @Override
     public void forDetailsPageBackPressed(int currentFragmentCount) {
-//        if (currentFragmentCount == 3) {
-        /*Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag("bakerryRecipieDetailViewFragment");
-        if (fragment instanceof BakerryRecipieDetailViewFragment) {*/
             BakerryRecipieDetailViewFragment bakerryRecipieDetailViewFragment = new BakerryRecipieDetailViewFragment();
             final Bundle bundle = new Bundle();
-            bundle.putInt("CLICKED_POSITION", mVideosClickedPostion);
-            bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryStepsListBeans);
-            bundle.putBoolean("IS_TWO_PANE", mTwoPane);
-            bundle.putParcelableArrayList("STEPS_LIST", mBakeryStepsListBeans);
-            bundle.putString("LIST_TYPE", "Steps");
+            bundle.putInt(activity.getString(R.string.clicked_position), mVideosClickedPostion);
+            bundle.putParcelableArrayList(activity.getString(R.string.bakery_master_list), mBakeryStepsListBeans);
+            bundle.putBoolean(activity.getString(R.string.is_two_pane), mTwoPane);
+            bundle.putParcelableArrayList(activity.getString(R.string.steps_list), mBakeryStepsListBeans);
+            bundle.putString(activity.getString(R.string.list_type), "Steps");
             bakerryRecipieDetailViewFragment.setArguments(bundle);
             FragmentManager fragmentManager = activity.getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager
@@ -47,18 +44,11 @@ public class BaseBackPressedListener implements BakeryHome.OnBackPressedListener
             if (!bakerryRecipieDetailViewFragment.isAdded()) {
                 fragmentTransaction
                         .replace(R.id.tabletViewFrameLayout,
-                                bakerryRecipieDetailViewFragment, "bakerryRecipieDetailViewFragment")
+                                bakerryRecipieDetailViewFragment, activity.getString(R.string.bakerryRecipieDetailViewFragment))
                         .addToBackStack(null).commit();
             } else {
                 fragmentTransaction.show(bakerryRecipieDetailViewFragment);
             }
-//            }
-     /*   } else if (count == 2) {
-
-        } else if (count == 1) {
-
-    }*/
-        /*}*/
     }
 
 }

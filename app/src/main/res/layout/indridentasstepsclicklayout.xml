@@ -24,7 +24,6 @@
           android:text="Recipe Steps"
           android:textSize="15sp" />
 
-
    </LinearLayout>
 
 </RelativeLayout>

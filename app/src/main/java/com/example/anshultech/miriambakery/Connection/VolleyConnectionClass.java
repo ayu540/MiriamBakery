@@ -41,8 +41,6 @@ public class VolleyConnectionClass {
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
             mRequestQueue = Volley.newRequestQueue(mContext.getApplicationContext());
         }
         return mRequestQueue;
@@ -55,7 +53,6 @@ public class VolleyConnectionClass {
         return jsonArrayRequest;
 
     }
-
 
     public JsonObjectRequest VolleyJSONRequest(int InputMethod, String ConnectionURL, JSONObject jsonObject,
                                                Response.Listener<JSONObject> jsonObjectListener,
@@ -82,13 +79,12 @@ public class VolleyConnectionClass {
                                              Response.Listener<String> stringListener,
                                              Response.ErrorListener stringErrorListener) {
 
-
         StringRequest stringRequest = new StringRequest(InputMetod, ConnectionURL,
                 stringListener,
                 stringErrorListener) {
             @Override
             public String getBodyContentType() {
-                return "application/json; charset=utf-8" ;
+                return "application/json; charset=utf-8";
             }
 
             @Override
@@ -102,7 +98,7 @@ public class VolleyConnectionClass {
 
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                String responseString = "" ;
+                String responseString = "";
                 if (response != null) {
                     responseString = String.valueOf(response.statusCode);
                 }
@@ -116,13 +112,9 @@ public class VolleyConnectionClass {
 
     public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
-       // this.networkConnectionInferface= networkConnectionInferface;
     }
 
-    public interface NetworkConnectionInferface{
+    public interface NetworkConnectionInferface {
         void isNetworkAvailable();
     }
-
-
-
 }

@@ -12,71 +12,35 @@
         android:id="@+id/recipeStepsVideoPlayerSimpleExoPlayer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/widget_margin"
+        android:layout_marginTop="@dimen/widget_margin"
+        android:layout_marginRight="@dimen/widget_margin"
+        android:layout_marginBottom="@dimen/widget_margin"
         android:layout_weight="1"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:adjustViewBounds="true"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalHalf"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:adjustViewBounds="true" />
 
     <ImageView
         android:id="@+id/recipeStepsVideoImageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/widget_margin"
+        android:layout_marginTop="@dimen/widget_margin"
+        android:layout_marginRight="@dimen/widget_margin"
+        android:layout_marginBottom="@dimen/widget_margin"
         android:layout_weight="1"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone"
-        />
-
-<!--    <android.support.constraint.Guideline
-        android:id="@+id/horizontalHalf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="256dp" />-->
+        android:visibility="gone" />
 
 
     <TextView
         android:id="@+id/recipeVideoDescriptionTextView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_below="@id/recipeStepsVideoPlayerSimpleExoPlayer"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horizontalHalf"
+        android:layout_marginLeft="@dimen/widget_margin"
+        android:layout_marginTop="@dimen/widget_margin"
+        android:layout_marginRight="@dimen/widget_margin"
+        android:layout_marginBottom="@dimen/widget_margin"
+        android:layout_weight="1"
         tools:text="3. Press the cookie crumb" />
-
-
-    <!--<com.google.android.exoplayer2.ui.PlaybackControlView-->
-        <!--android:id="@+id/exoplayerPlayBackControlView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_below="@id/recipeStepsVideoPlayerSimpleExoPlayer"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintRight_toRightOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@id/recipeVideoDescriptionTextView"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/horizontalHalf" />-->
-
-    <!--<FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <include layout="@layout/navigationrootlayout"/>
-    </FrameLayout>-->
 
 </LinearLayout>

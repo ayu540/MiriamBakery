@@ -2,6 +2,10 @@ package com.example.anshultech.miriambakery.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +25,7 @@ import com.example.anshultech.miriambakery.Connection.VolleyConnectionClass;
 import com.example.anshultech.miriambakery.Fragments.BakerryRecipieDetailViewFragment;
 import com.example.anshultech.miriambakery.Fragments.BakeryIngredientsStepOptionsChooseFragment;
 import com.example.anshultech.miriambakery.R;
+import com.example.anshultech.miriambakery.Utilities.SimpleIdlingResource;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -42,6 +47,17 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
     private boolean doubleBackToExitPressedOnce = false;
 
     ArrayList<BakeryRecipiesListBean> mBakeryRecipiesArrayListBeans;
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
 
     public BakeryHome() {
     }
@@ -57,15 +73,15 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
 
         tabletViewFrameLayout = (FrameLayout) findViewById(R.id.tabletViewFrameLayout);
 
-        getSupportActionBar().setTitle("Miriam Recipie List");
+        getSupportActionBar().setTitle(getResources().getString(R.string.MiriamRecipieList));
 
 
         if (tabletViewFrameLayout != null) {
             mTwoPane = true;
         }
 
-
         networkCallToLoadData();
+        getIdlingResource();
 
 
     }
@@ -100,11 +116,11 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
 
                                         //Intent intent = new Intent();
                                         Bundle bundle = new Bundle();
-                                        bundle.putInt("CLICKED_POSITION", position);
-                                        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", lBakeryRecipiesListBeans);
-                                        bundle.putParcelableArrayList("INGREDINET_LIST", lBakeryRecipiesListBeans.get(position).getBakeryIngridentsListBeans());
-                                        bundle.putParcelableArrayList("STEPS_LIST", lBakeryRecipiesListBeans.get(position).getBakeryStepsListBeans());
-                                        bundle.putBoolean("IS_TWO_PANE", mTwoPane);
+                                        bundle.putInt(getResources().getString(R.string.clicked_position), position);
+                                        bundle.putParcelableArrayList(getResources().getString(R.string.bakery_master_list), lBakeryRecipiesListBeans);
+                                        bundle.putParcelableArrayList(getResources().getString(R.string.clicked_position), lBakeryRecipiesListBeans.get(position).getBakeryIngridentsListBeans());
+                                        bundle.putParcelableArrayList(getResources().getString(R.string.steps_list), lBakeryRecipiesListBeans.get(position).getBakeryStepsListBeans());
+                                        bundle.putBoolean(getResources().getString(R.string.is_two_pane), mTwoPane);
                                         BakeryIngredientsStepOptionsChooseFragment bakeryIngredientsStepOptionsChooseFragment = new BakeryIngredientsStepOptionsChooseFragment();
                                         bakeryIngredientsStepOptionsChooseFragment.setArguments(bundle);
                                         //  intent.putExtras(bundle);
@@ -117,7 +133,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                                             if (!bakeryIngredientsStepOptionsChooseFragment.isAdded()) {
                                                 fragmentTransaction
                                                         .replace(R.id.tabletViewFrameLayout,
-                                                                bakeryIngredientsStepOptionsChooseFragment, "bakeryIngredientsStepOptionsChooseFragment")
+                                                                bakeryIngredientsStepOptionsChooseFragment, getResources().getString(R.string.bakeryIngredientsStepOptionsChooseFragment))
                                                         .addToBackStack(null).commit();
                                             } else {
                                                 fragmentTransaction.show(bakeryIngredientsStepOptionsChooseFragment);
@@ -134,6 +150,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
 //                                    }
                                 });
                                 mRecipiListRecyclerView.setAdapter(mBakeryRecipiesListRecyclerViewAdapter);
+                                mIdlingResource.setIdleState(true);
                             }
 
 
@@ -155,47 +172,22 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
     }
 
 
-   /* @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("", mBakeryRecipiesArrayListBeans);
-
-
-
-        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryRecipiesArrayListBeans);
-        bundle.putParcelableArrayList("INGREDINET_LIST", mBakeryRecipiesArrayListBeans.get(position).getBakeryIngridentsListBeans());
-        bundle.putParcelableArrayList("STEPS_LIST", mBakeryRecipiesArrayListBeans.get(position).getBakeryStepsListBeans());
-        bundle.putBoolean("IS_TWO_PANE", mTwoPane);
-
-    }*/
-
     @Override
     public void onBackPressed() {
-        /*if (doubleBackToExitPressedOnce) {
-            super.forDetailsPageBackPressed();
-            finish();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();*/
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
-        //      Fragment currentFragment = getSupportFragmentManager().getFragments().get(getSupportFragmentManager().getBackStackEntryCount());
         if (onBackPressedListener != null) {
 
-            if (getSupportFragmentManager().findFragmentByTag("bakerryRecipieDetailViewFragment") instanceof BakerryRecipieDetailViewFragment) {
+            if (getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.bakerryRecipieDetailViewFragment)) instanceof BakerryRecipieDetailViewFragment) {
                 onBackPressedListener.forDetailsPageBackPressed(count);
             }
         } else if (onBackOptionChoosePressedListener != null) {
-            if (getSupportFragmentManager().findFragmentByTag("bakeryIngredientsStepOptionsChooseFragment") instanceof BakeryIngredientsStepOptionsChooseFragment) {
+            if (getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.bakeryIngredientsStepOptionsChooseFragment)) instanceof BakeryIngredientsStepOptionsChooseFragment) {
                 onBackOptionChoosePressedListener.forOptionChooseBackPressed(count);
             }
-
         } else {
             super.onBackPressed();
         }
-
     }
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {

@@ -36,20 +36,20 @@ public class BakeryShowViews extends AppCompatActivity {
         mContext = BakeryShowViews.this;
 
         if (getIntent() != null) {
-            mBakeryRecipiesListBeans = getIntent().getExtras().getParcelableArrayList("BAKERY_MASTER_LIST");
-            mRecipeMasterListClickedPosition = getIntent().getExtras().getInt("CLICKED_POSITION");
-            mBakeryIngridentsListBeans = getIntent().getExtras().getParcelableArrayList("INGREDINET_LIST");
-            mBakeryStepsListBeans = getIntent().getExtras().getParcelableArrayList("STEPS_LIST");
-            mTwoPane = getIntent().getExtras().getBoolean("IS_TWO_PANE");
+            mBakeryRecipiesListBeans = getIntent().getExtras().getParcelableArrayList(getResources().getString(R.string.bakery_master_list));
+            mRecipeMasterListClickedPosition = getIntent().getExtras().getInt(getResources().getString(R.string.clicked_position));
+            mBakeryIngridentsListBeans = getIntent().getExtras().getParcelableArrayList(getResources().getString(R.string.ingredient_list));
+            mBakeryStepsListBeans = getIntent().getExtras().getParcelableArrayList(getResources().getString(R.string.steps_list));
+            mTwoPane = getIntent().getExtras().getBoolean(getResources().getString(R.string.is_two_pane));
         }
 
 
         Bundle bundle = new Bundle();
-        bundle.putInt("CLICKED_POSITION", mRecipeMasterListClickedPosition);
-        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryRecipiesListBeans);
-        bundle.putParcelableArrayList("INGREDINET_LIST", mBakeryIngridentsListBeans);
-        bundle.putParcelableArrayList("STEPS_LIST", mBakeryStepsListBeans);
-        bundle.putBoolean("IS_TWO_PANE", mTwoPane);
+        bundle.putInt(getResources().getString(R.string.clicked_position), mRecipeMasterListClickedPosition);
+        bundle.putParcelableArrayList(getResources().getString(R.string.bakery_master_list), mBakeryRecipiesListBeans);
+        bundle.putParcelableArrayList(getResources().getString(R.string.clicked_position), mBakeryIngridentsListBeans);
+        bundle.putParcelableArrayList(getResources().getString(R.string.steps_list), mBakeryStepsListBeans);
+        bundle.putBoolean(getResources().getString(R.string.is_two_pane), mTwoPane);
         BakeryIngredientsStepOptionsChooseFragment bakeryIngredientsStepOptionsChooseFragment = new BakeryIngredientsStepOptionsChooseFragment();
         bakeryIngredientsStepOptionsChooseFragment.setArguments(bundle);
 

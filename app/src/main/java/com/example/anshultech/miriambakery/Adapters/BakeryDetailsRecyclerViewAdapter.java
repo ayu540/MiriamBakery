@@ -24,7 +24,6 @@ public class BakeryDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Baker
     private String mListType;
 
 
-
     public BakeryDetailsRecyclerViewAdapter(Context lContext, ArrayList<BakeryIngridentsListBean> bakeryIngridentsListBeans,
                                             BakeryDetailsIngredientsOnClickListener bakeryDetailsIngredientsOnClickListener, String listType) {
         this.mContext = lContext;
@@ -66,10 +65,7 @@ public class BakeryDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Baker
             recipeDesciption = mBakeryIngridentsListBeans.get(position).getIngredient();
         }
 
-
         bakeryDetailsHolder.recipieDetailsDesciptionTextView.setText(recipeDesciption);
-
-
     }
 
     @Override
@@ -96,12 +92,9 @@ public class BakeryDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Baker
         public void onClick(View v) {
             if (mListType.equalsIgnoreCase("Steps")) {
                 mBakeryDetailsStepsOnClickListener.onBakeryDetailsStepsCliCkListenerr(getAdapterPosition(), mBakeryStepsListBeans);
-            }
-            else {
+            } else {
                 mBakeryDetailsIngredientsOnClickListener.onBakeryDetailsIngredientsCliCkListenerr(getAdapterPosition(), mBakeryIngridentsListBeans);
             }
-
-
         }
     }
 
@@ -113,11 +106,5 @@ public class BakeryDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Baker
         public void onBakeryDetailsStepsCliCkListenerr(int position, ArrayList<BakeryStepsListBean> bakeryStepsListBeans);
 
     }
-
-//    public void updateIndridentsAdapterView(ArrayList<BakeryIngridentsListBean> bakeryIngridentsListBeans){
-//        mBakeryIngridentsListBeans=bakeryIngridentsListBeans;
-//        notifyDataSetChanged();
-//    }
-
 
 }

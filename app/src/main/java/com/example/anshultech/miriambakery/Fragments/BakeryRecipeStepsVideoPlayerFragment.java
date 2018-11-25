@@ -6,32 +6,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.anshultech.miriambakery.Activities.BakeryHome;
-//import com.example.anshultech.miriambakery.Activities.MySessionCallBack;
 import com.example.anshultech.miriambakery.Activities.BakeryRecipeStepsVideoPlayerActivity;
 import com.example.anshultech.miriambakery.Bean.BakeryStepsListBean;
 import com.example.anshultech.miriambakery.R;
@@ -60,34 +47,22 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Player.EventListener{
+public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Player.EventListener {
 
     private SimpleExoPlayerView mSimpleExoPlayerView;
     private static SimpleExoPlayer mSimpleExoPlayer;
     private Context mContext;
     private String videoUrl;
-    private String longDescription;
     private ArrayList<BakeryStepsListBean> mBakeryStepsListBeans;
     private int mVideosClickedPostion;
-    private boolean mIsFirstTimeLaunched;
     private TextView mRecipeVideoDescriptionTextView;
-    //   private TextView mRecipieVideoNavigationTextView;
     private MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
-    private boolean doubleBackToExitPressedOnce = false;
-
-    //navigation drawer layout
-//    private DrawerLayout designNavigationViewDrawerLayout;
-//    private NavigationView navigationView;
-//    private Toolbar navigationDrawerToolbar;
-//    private ActionBarDrawerToggle actionBarDrawerToggle;
     private boolean mTwoPane = false;
     private long positionPlayer;
     private boolean playWhenReady;
     private ImageView recipeStepsVideoImageView;
     private RecyclerView recipiesMasterListRecyclerView1;
-    private RecyclerView recipiesMasterListRecyclerView;
-
 
     public BakeryRecipeStepsVideoPlayerFragment() {
     }
@@ -104,54 +79,42 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
 
         mBakeryStepsListBeans = new ArrayList<BakeryStepsListBean>();
 
-        mVideosClickedPostion = getArguments().getInt("STEPS_CLICKED_POSITION");
-        mBakeryStepsListBeans = getArguments().getParcelableArrayList("VIDEO_STEPS_LIST");
-        mTwoPane = getArguments().getBoolean("IS_TWO_PANE");
+        mVideosClickedPostion = getArguments().getInt(getResources().getString(R.string.steps_clicked_position));
+        mBakeryStepsListBeans = getArguments().getParcelableArrayList(getResources().getString(R.string.video_steps_list));
+        mTwoPane = getArguments().getBoolean(getResources().getString(R.string.is_two_pane));
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
-
         View attachedRootView = inflater.inflate(R.layout.activity_recipe_steps_vidoes_player, container, false);
-
-
 
         mSimpleExoPlayerView = (SimpleExoPlayerView) attachedRootView.findViewById(R.id.recipeStepsVideoPlayerSimpleExoPlayer);
         mRecipeVideoDescriptionTextView = (TextView) attachedRootView.findViewById(R.id.recipeVideoDescriptionTextView);
         recipeStepsVideoImageView = (ImageView) attachedRootView.findViewById(R.id.recipeStepsVideoImageView);
-        /*recipiesMasterListRecyclerView = (RecyclerView) attachedRootView.findViewById(R.id.recipiesMasterListRecyclerView);
-        BakeryHome bakeryHome = new BakeryHome();
-        bakeryHome.setmRecipiListRecyclerView(recipiesMasterListRecyclerView);
-        recipiesMasterListRecyclerView1 = bakeryHome.getmRecipiListRecyclerView(); */
         View view = getActivity().findViewById(R.id.recipiesMasterListRecyclerView);
         if (view instanceof RecyclerView) {
             recipiesMasterListRecyclerView1 = (RecyclerView) view;
         }
 
-
         if (savedInstanceState != null) {
-            mVideosClickedPostion = savedInstanceState.getInt("INSTANCE_SAVED_VIDEO_POSITION");
-            mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST");
-            mTwoPane = savedInstanceState.getBoolean("INSTANCE_SAVED_TWO_PANE");
-
-            playWhenReady = savedInstanceState.getBoolean("INSTANCE_SAVED_PLAY_WHEN_READY");
+            mVideosClickedPostion = savedInstanceState.getInt(getResources().getString(R.string.instance_saved_video_position));
+            mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList(getResources().getString(R.string.instance_saved_video_list));
+            mTwoPane = savedInstanceState.getBoolean(getResources().getString(R.string.instance_saved_two_pane));
+            playWhenReady = savedInstanceState.getBoolean(getResources().getString(R.string.instance_saved_play_when_ready));
         }
 
-        ((BakeryHome)getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity(), mVideosClickedPostion, mBakeryStepsListBeans, mTwoPane));
+        ((BakeryHome) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity(), mVideosClickedPostion, mBakeryStepsListBeans, mTwoPane));
 
         if (mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL() != null) {
             videoUrl = mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL();
             if (mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL().equalsIgnoreCase("")) {
-                Log.d("BakeryViewActivty", "EMPTY URL");
                 mSimpleExoPlayerView.setVisibility(View.GONE);
                 recipeStepsVideoImageView.setVisibility(View.VISIBLE);
                 if (!mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL().equalsIgnoreCase("")) {
                     //Load thumbnail if present
                     Picasso.get().load((mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL())).into(recipeStepsVideoImageView);
-                    //Picasso.with(this).load((mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL()).into(recipeStepsVideoImageView);
                 } else {
                     recipeStepsVideoImageView.setVisibility(View.GONE);
                 }
@@ -166,7 +129,7 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
             } else {
                 if (savedInstanceState != null) {
                     //resuming by seeking to the last position
-                    positionPlayer = savedInstanceState.getLong("INSTANCE_SAVED_POSITION_PLAYER");
+                    positionPlayer = savedInstanceState.getLong(getResources().getString(R.string.instance_saved_position_player));
                 }
                 recipeStepsVideoImageView.setVisibility(View.GONE);
                 initializeMediaSession();
@@ -178,7 +141,6 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
                     mSimpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
                     mSimpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
                 }
-
             }
 
         } else {
@@ -193,94 +155,17 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
 
         }
 
-
-       /* getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP) {
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-                        BakerryRecipieDetailViewFragment bakerryRecipieDetailViewFragment = new BakerryRecipieDetailViewFragment();
-                        final Bundle bundle = new Bundle();
-                        bundle.putInt("CLICKED_POSITION", mVideosClickedPostion);
-                        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryStepsListBeans);
-                        bundle.putBoolean("IS_TWO_PANE", mTwoPane);
-                        bundle.putParcelableArrayList("STEPS_LIST", mBakeryStepsListBeans);
-                        bundle.putString("LIST_TYPE", "Steps");
-                        bakerryRecipieDetailViewFragment.setArguments(bundle);
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager
-                                .beginTransaction();
-                        if (!bakerryRecipieDetailViewFragment.isAdded()) {
-                            fragmentTransaction
-                                    .replace(R.id.tabletViewFrameLayout,
-                                            bakerryRecipieDetailViewFragment, "bakerryRecipieDetailViewFragment")
-                                    .addToBackStack(null).commit();
-                        } else {
-                            fragmentTransaction.show(bakerryRecipieDetailViewFragment);
-                        }
-
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });*/
-
-       /* BakeryHome bakeryHome = new BakeryHome();
-        bakeryHome.setOnBackPressedListener(new BakeryHome.OnBackPressedListener(getActivity()));
-
-        ((BakeryHome)getActivity()).setOnBackPressedListener(new BakeryHome.OnBackPressedListener() {
-            @Override
-            public void onBackPressed() {
-                BakerryRecipieDetailViewFragment bakerryRecipieDetailViewFragment = new BakerryRecipieDetailViewFragment();
-                final Bundle bundle = new Bundle();
-                bundle.putInt("CLICKED_POSITION", mVideosClickedPostion);
-                bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryStepsListBeans);
-                bundle.putBoolean("IS_TWO_PANE", mTwoPane);
-                bundle.putParcelableArrayList("STEPS_LIST", mBakeryStepsListBeans);
-                bundle.putString("LIST_TYPE", "Steps");
-                bakerryRecipieDetailViewFragment.setArguments(bundle);
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager
-                        .beginTransaction();
-                if (!bakerryRecipieDetailViewFragment.isAdded()) {
-                    fragmentTransaction
-                            .replace(R.id.tabletViewFrameLayout,
-                                    bakerryRecipieDetailViewFragment, "bakerryRecipieDetailViewFragment")
-                            .addToBackStack(null).commit();
-                } else {
-                    fragmentTransaction.show(bakerryRecipieDetailViewFragment);
-                }
-            }
-        });
-*/
-
-        /*getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-
-                Fragment fragment = getFragmentManager().findFragmentByTag("bakerryRecipieDetailViewFragment");
-                if (fragment instanceof BakerryRecipieDetailViewFragment) {
-                    // BakerryRecipieDetailViewFragment bakerryRecipieDetailViewFragment= (BakerryRecipieDetailViewFragment) fragment;
-
-                }
-            }
-        });*/
-
-
         return attachedRootView;
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("INSTANCE_SAVED_VIDEO_POSITION", mVideosClickedPostion);
-        outState.putParcelableArrayList("INSTANCE_SAVED_VIDEO_LIST", mBakeryStepsListBeans);
-        outState.putBoolean("INSTANCE_SAVED_TWO_PANE", mTwoPane);
-        outState.putLong("INSTANCE_SAVED_POSITION_PLAYER", positionPlayer);
-        outState.putBoolean("INSTANCE_SAVED_PLAY_WHEN_READY", playWhenReady);
-        Log.d("BakeryRecipiesVideoPl", "onSaveInstanceState Instance State" + outState);
+        outState.putInt(getResources().getString(R.string.instance_saved_video_position), mVideosClickedPostion);
+        outState.putParcelableArrayList(getResources().getString(R.string.instance_saved_video_list), mBakeryStepsListBeans);
+        outState.putBoolean(getResources().getString(R.string.instance_saved_two_pane), mTwoPane);
+        outState.putLong(getResources().getString(R.string.instance_saved_position_player), positionPlayer);
+        outState.putBoolean(getResources().getString(R.string.instance_saved_play_when_ready), playWhenReady);
     }
 
 
@@ -357,33 +242,6 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
         }
 
     }
-/*
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        BakerryRecipieDetailViewFragment bakerryRecipieDetailViewFragment = new BakerryRecipieDetailViewFragment();
-        final Bundle bundle = new Bundle();
-        bundle.putInt("CLICKED_POSITION", mVideosClickedPostion);
-        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryStepsListBeans);
-        bundle.putBoolean("IS_TWO_PANE", mTwoPane);
-        bundle.putParcelableArrayList("STEPS_LIST", mBakeryStepsListBeans);
-        bundle.putString("LIST_TYPE", "Steps");
-        bakerryRecipieDetailViewFragment.setArguments(bundle);
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction();
-        if (!bakerryRecipieDetailViewFragment.isAdded()) {
-            fragmentTransaction
-                    .replace(R.id.tabletViewFrameLayout,
-                            bakerryRecipieDetailViewFragment, "bakerryRecipieDetailViewFragment")
-                    .addToBackStack(null).commit();
-        } else {
-            fragmentTransaction.show(bakerryRecipieDetailViewFragment);
-        }
-
-    }
-*/
 
     @Override
     public void onResume() {
@@ -475,38 +333,6 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
 
     }
 
-/*
-    @Override
-    public void onBackPressed() {
-        Log.d("here", "in vide fragment ");
-    }
-*/
-
-/*    @Override
-    public void doBack() {
-
-        BakerryRecipieDetailViewFragment bakerryRecipieDetailViewFragment = new BakerryRecipieDetailViewFragment();
-        final Bundle bundle = new Bundle();
-        bundle.putInt("CLICKED_POSITION", mVideosClickedPostion);
-        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryStepsListBeans);
-        bundle.putBoolean("IS_TWO_PANE", mTwoPane);
-        bundle.putParcelableArrayList("STEPS_LIST", mBakeryStepsListBeans);
-        bundle.putString("LIST_TYPE", "Steps");
-        bakerryRecipieDetailViewFragment.setArguments(bundle);
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction();
-        if (!bakerryRecipieDetailViewFragment.isAdded()) {
-            fragmentTransaction
-                    .replace(R.id.tabletViewFrameLayout,
-                            bakerryRecipieDetailViewFragment, "bakerryRecipieDetailViewFragment")
-                    .addToBackStack(null).commit();
-        } else {
-            fragmentTransaction.show(bakerryRecipieDetailViewFragment);
-        }
-    }*/
-
-
     public static class MySessionCallBack extends MediaSessionCompat.Callback {
 
         public MySessionCallBack() {
@@ -515,14 +341,12 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
         @Override
         public void onPrepare() {
             super.onPrepare();
-
         }
 
         @Override
         public void onPlay() {
             super.onPlay();
             mSimpleExoPlayer.setPlayWhenReady(true);
-
         }
 
         @Override
@@ -562,5 +386,4 @@ public class BakeryRecipeStepsVideoPlayerFragment extends Fragment implements Pl
             super.onSeekTo(pos);
         }
     }
-
 }

@@ -29,11 +29,11 @@ public class BakeryChooseOptionBackPressedListener implements BakeryHome.OnBackO
     public void forOptionChooseBackPressed(int currentFragmentCount) {
 
         Bundle bundle = new Bundle();
-        bundle.putInt("CLICKED_POSITION", mRecipeMasterListClickedPosition);
-        bundle.putParcelableArrayList("BAKERY_MASTER_LIST", mBakeryRecipiesListBeans);
-        bundle.putParcelableArrayList("INGREDINET_LIST", mBakeryRecipiesListBeans.get(mRecipeMasterListClickedPosition).getBakeryIngridentsListBeans());
-        bundle.putParcelableArrayList("STEPS_LIST", mBakeryRecipiesListBeans.get(mRecipeMasterListClickedPosition).getBakeryStepsListBeans());
-        bundle.putBoolean("IS_TWO_PANE", mTwoPane);
+        bundle.putInt(activity.getString(R.string.clicked_position), mRecipeMasterListClickedPosition);
+        bundle.putParcelableArrayList(activity.getString(R.string.bakery_master_list), mBakeryRecipiesListBeans);
+        bundle.putParcelableArrayList(activity.getString(R.string.clicked_position), mBakeryRecipiesListBeans.get(mRecipeMasterListClickedPosition).getBakeryIngridentsListBeans());
+        bundle.putParcelableArrayList(activity.getString(R.string.steps_list), mBakeryRecipiesListBeans.get(mRecipeMasterListClickedPosition).getBakeryStepsListBeans());
+        bundle.putBoolean(activity.getString(R.string.is_two_pane), mTwoPane);
         BakeryIngredientsStepOptionsChooseFragment bakeryIngredientsStepOptionsChooseFragment = new BakeryIngredientsStepOptionsChooseFragment();
         bakeryIngredientsStepOptionsChooseFragment.setArguments(bundle);
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -42,7 +42,7 @@ public class BakeryChooseOptionBackPressedListener implements BakeryHome.OnBackO
         if (!bakeryIngredientsStepOptionsChooseFragment.isAdded()) {
             fragmentTransaction
                     .replace(R.id.tabletViewFrameLayout,
-                            bakeryIngredientsStepOptionsChooseFragment, "bakeryIngredientsStepOptionsChooseFragment")
+                            bakeryIngredientsStepOptionsChooseFragment, activity.getString(R.string.bakeryIngredientsStepOptionsChooseFragment))
                     .addToBackStack(null).commit();
         } else {
             fragmentTransaction.show(bakeryIngredientsStepOptionsChooseFragment);

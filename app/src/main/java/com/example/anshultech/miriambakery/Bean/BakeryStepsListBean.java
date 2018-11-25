@@ -18,8 +18,6 @@ public class BakeryStepsListBean implements Parcelable {
     @SerializedName("thumbnailURL")
     private String thumbnailURL;
 
-
-
     public BakeryStepsListBean(){}
 
     protected BakeryStepsListBean(Parcel in) {
