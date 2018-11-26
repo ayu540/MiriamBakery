@@ -92,7 +92,7 @@ public class BakerryRecipieDetailViewActivity extends AppCompatActivity {
             }
         } else if (RECIPE_LIST_TYPE.equalsIgnoreCase("Steps")) {
             mBakeryStepsListBeans = getIntent().getExtras().getParcelableArrayList(getResources().getString(R.string.steps_list));
-            getSupportActionBar().setTitle("Recipie Steps");
+            getSupportActionBar().setTitle(getResources().getString(R.string.RecipieSteps));
             if (mBakeryStepsListBeans != null) {
                 mbBakeryDetailsRecyclerViewAdapter = new BakeryDetailsRecyclerViewAdapter(mContext, mBakeryStepsListBeans,
                         new BakeryDetailsRecyclerViewAdapter.BakeryDetailsStepsOnClickListener() {

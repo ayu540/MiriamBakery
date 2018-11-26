@@ -25,6 +25,7 @@
     <string name="instance_list_type">INSTANCE_LIST_TYPE</string>
     <string name="instance_is_two_pane">INSTANCE_IS_TWO_PANE</string>
     <string name="RecipieIngredients">Recipe Ingredients</string>
+    <string name="RecipieSteps">Recipie Steps</string>
     <string name="bakeryRecipeStepsVideoPlayerFragment">bakeryRecipeStepsVideoPlayerFragment</string>
     <string name="no_data_to_show">No Data to Show</string>
     <string name="servings">Servings:</string>
