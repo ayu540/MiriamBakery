@@ -75,7 +75,7 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             Bundle bundle = new Bundle();
             bundle.putInt(mContext.getString(R.string.clicked_position), position);
             bundle.putParcelableArrayList(mContext.getString(R.string.bakery_master_list), mBakeryRecipiesArrayListBeans);
-            bundle.putParcelableArrayList(mContext.getString(R.string.clicked_position), mBakeryRecipiesArrayListBeans.get(position).getBakeryIngridentsListBeans());
+            bundle.putParcelableArrayList(mContext.getString(R.string.ingredient_list), mBakeryRecipiesArrayListBeans.get(position).getBakeryIngridentsListBeans());
             bundle.putParcelableArrayList(mContext.getString(R.string.steps_list), mBakeryRecipiesArrayListBeans.get(position).getBakeryStepsListBeans());
             bundle.putBoolean(mContext.getString(R.string.is_two_pane), mTwoPane);
             Intent intent= new Intent();
