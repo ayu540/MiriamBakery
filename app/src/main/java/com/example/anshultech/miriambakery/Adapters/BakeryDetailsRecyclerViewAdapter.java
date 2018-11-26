@@ -52,6 +52,8 @@ public class BakeryDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Baker
     public void onBindViewHolder(@NonNull BakeryDetailsHolder bakeryDetailsHolder, int position) {
 
         String recipeDesciption = new String();
+        bakeryDetailsHolder.ingridentsQuantityTextView.setVisibility(View.GONE);
+        bakeryDetailsHolder.ingridentsMeasureTextView.setVisibility(View.GONE);
 
         if (mListType.equalsIgnoreCase("Steps")) {
             if (mBakeryStepsListBeans.size() - 1 == position) {
@@ -62,6 +64,10 @@ public class BakeryDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Baker
             if (mBakeryIngridentsListBeans.size() - 1 == position) {
                 bakeryDetailsHolder.recipieDetailsHorizontalBar.setVisibility(View.GONE);
             }
+            bakeryDetailsHolder.ingridentsQuantityTextView.setVisibility(View.VISIBLE);
+            bakeryDetailsHolder.ingridentsMeasureTextView.setVisibility(View.VISIBLE);
+            bakeryDetailsHolder.ingridentsQuantityTextView.setText(Double.toString(mBakeryIngridentsListBeans.get(position).getQuantity()));
+            bakeryDetailsHolder.ingridentsMeasureTextView.setText(mBakeryIngridentsListBeans.get(position).getMeasure());
             recipeDesciption = mBakeryIngridentsListBeans.get(position).getIngredient();
         }
 
@@ -80,11 +86,15 @@ public class BakeryDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Baker
     public class BakeryDetailsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView recipieDetailsDesciptionTextView;
         View recipieDetailsHorizontalBar;
+        TextView ingridentsQuantityTextView;
+        TextView ingridentsMeasureTextView;
 
         public BakeryDetailsHolder(@NonNull View itemView) {
             super(itemView);
             recipieDetailsDesciptionTextView = (TextView) itemView.findViewById(R.id.recipieDetailsDesciptionTextView);
             recipieDetailsHorizontalBar = (View) itemView.findViewById(R.id.recipieDetailsHorizontalBar);
+            ingridentsQuantityTextView = (TextView) itemView.findViewById(R.id.ingridentsQuantityTextView);
+            ingridentsMeasureTextView = (TextView) itemView.findViewById(R.id.ingridentsMeasureTextView);
             itemView.setOnClickListener(this);
         }
 

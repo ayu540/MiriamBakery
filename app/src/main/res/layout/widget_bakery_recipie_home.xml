@@ -2,14 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/widget_margin">
+    android:background="@color/lightPimaryColor"
+    android:padding="@dimen/dimen_8dp">
 
     <RelativeLayout
         android:id="@+id/appwidget_RelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#09C"
-        android:padding="@dimen/widget_margin">
+        android:background="@drawable/layout_bg_pink"
+        android:padding="@dimen/dimen_8dp">
 
 
         <TextView
@@ -22,7 +23,7 @@
             android:contentDescription="@string/appwidget_text"
             android:gravity="center_horizontal"
             android:src="@drawable/allcakes_launcher"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/colorWhite"
             tools:text="bakerryNamer" />
 
     </RelativeLayout>

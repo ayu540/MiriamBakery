@@ -95,18 +95,25 @@ public class BakeryRecipeStepsVideoPlayerActivity extends AppCompatActivity impl
         if (mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL() != null) {
             videoUrl = mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL();
             if (mBakeryStepsListBeans.get(mVideosClickedPostion).getVideoURL().equalsIgnoreCase("")) {
-                mSimpleExoPlayerView.setVisibility(View.GONE);
-                recipeStepsVideoImageView.setVisibility(View.VISIBLE);
+                // mSimpleExoPlayerView.setVisibility(View.GONE);
+
                 if (!mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL().equalsIgnoreCase("")) {
                     //Load thumbnail if present
-                    Picasso.get().load((mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL())).into(recipeStepsVideoImageView);
+                    videoUrl = mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL();
+                    initializeMediaSession();
+                    intializePlayer(Uri.parse(videoUrl));
+//                    recipeStepsVideoImageView.setVisibility(View.VISIBLE);
+                    //Picasso.get().load((mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL())).into(recipeStepsVideoImageView);
                 } else {
-                    recipeStepsVideoImageView.setVisibility(View.GONE);
+                    mSimpleExoPlayerView.setVisibility(View.GONE);
                 }
+                mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
+
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
+
                 } else {
                     hideUI();
+
                     mSimpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
                     mSimpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
                 }
@@ -130,9 +137,18 @@ public class BakeryRecipeStepsVideoPlayerActivity extends AppCompatActivity impl
             }
 
         } else {
-            mSimpleExoPlayerView.setVisibility(View.GONE);
+            if (!mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL().equalsIgnoreCase("")) {
+                //Load thumbnail if present
+                videoUrl = mBakeryStepsListBeans.get(mVideosClickedPostion).getThumbnailURL();
+                initializeMediaSession();
+                intializePlayer(Uri.parse(videoUrl));
+            } else {
+                mSimpleExoPlayerView.setVisibility(View.GONE);
+            }
+
+            mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                mRecipeVideoDescriptionTextView.setText(mBakeryStepsListBeans.get(mVideosClickedPostion).getDescription());
+
             } else {
                 hideUI();
                 mSimpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;

@@ -118,7 +118,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                                         Bundle bundle = new Bundle();
                                         bundle.putInt(getResources().getString(R.string.clicked_position), position);
                                         bundle.putParcelableArrayList(getResources().getString(R.string.bakery_master_list), lBakeryRecipiesListBeans);
-                                        bundle.putParcelableArrayList(getResources().getString(R.string.clicked_position), lBakeryRecipiesListBeans.get(position).getBakeryIngridentsListBeans());
+                                        bundle.putParcelableArrayList(getResources().getString(R.string.ingredient_list), lBakeryRecipiesListBeans.get(position).getBakeryIngridentsListBeans());
                                         bundle.putParcelableArrayList(getResources().getString(R.string.steps_list), lBakeryRecipiesListBeans.get(position).getBakeryStepsListBeans());
                                         bundle.putBoolean(getResources().getString(R.string.is_two_pane), mTwoPane);
                                         BakeryIngredientsStepOptionsChooseFragment bakeryIngredientsStepOptionsChooseFragment = new BakeryIngredientsStepOptionsChooseFragment();
