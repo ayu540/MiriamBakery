@@ -1,4 +1,4 @@
-package com.example.anshultech.miriambakery;
+package com.example.anshultech.miriambakery.Widgets;
 
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
@@ -15,6 +15,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.anshultech.miriambakery.Bean.BakeryRecipiesListBean;
 import com.example.anshultech.miriambakery.Connection.ConnectionURL;
 import com.example.anshultech.miriambakery.Connection.VolleyConnectionClass;
+import com.example.anshultech.miriambakery.R;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;

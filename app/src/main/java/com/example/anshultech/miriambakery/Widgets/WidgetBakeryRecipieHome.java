@@ -1,4 +1,4 @@
-package com.example.anshultech.miriambakery;
+package com.example.anshultech.miriambakery.Widgets;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -12,6 +12,7 @@ import android.widget.RemoteViews;
 
 import com.example.anshultech.miriambakery.Activities.BakeryIngredientsStepOptionsChooseActivity;
 import com.example.anshultech.miriambakery.Bean.BakeryRecipiesListBean;
+import com.example.anshultech.miriambakery.R;
 
 import java.util.ArrayList;
 

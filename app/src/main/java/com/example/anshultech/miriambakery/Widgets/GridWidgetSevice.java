@@ -1,4 +1,4 @@
-package com.example.anshultech.miriambakery;
+package com.example.anshultech.miriambakery.Widgets;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,21 +6,12 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.anshultech.miriambakery.Bean.BakeryRecipiesListBean;
-import com.example.anshultech.miriambakery.Connection.ConnectionURL;
-import com.example.anshultech.miriambakery.Connection.VolleyConnectionClass;
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.anshultech.miriambakery.R;
 
 import java.util.ArrayList;
 
-import static com.example.anshultech.miriambakery.WidgetBakeryRecipieHome.mBakeryRecipiesArrayListBeansHomeWidget;
+import static com.example.anshultech.miriambakery.Widgets.WidgetBakeryRecipieHome.mBakeryRecipiesArrayListBeansHomeWidget;
 
 
 public class GridWidgetSevice extends RemoteViewsService {

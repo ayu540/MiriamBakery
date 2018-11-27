@@ -22,8 +22,6 @@ import com.example.anshultech.miriambakery.Adapters.BakeryRecipiesListRecyclerVi
 import com.example.anshultech.miriambakery.Bean.BakeryRecipiesListBean;
 import com.example.anshultech.miriambakery.Connection.ConnectionURL;
 import com.example.anshultech.miriambakery.Connection.VolleyConnectionClass;
-import com.example.anshultech.miriambakery.Fragments.BakerryRecipieDetailViewFragment;
-import com.example.anshultech.miriambakery.Fragments.BakeryIngredientsStepOptionsChooseFragment;
 import com.example.anshultech.miriambakery.R;
 import com.example.anshultech.miriambakery.Utilities.SimpleIdlingResource;
 import com.google.gson.Gson;
@@ -40,10 +38,10 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
     private RecyclerView mRecipiListRecyclerView;
     private BakeryRecipiesListRecyclerViewAdapter mBakeryRecipiesListRecyclerViewAdapter;
     private final int RECIPIE_MASTER_LIST_LISTENER_CODE = 11;
-    private FrameLayout tabletViewFrameLayout;
-    private boolean mTwoPane = false;
-    private OnBackPressedListener onBackPressedListener;
-    private OnBackOptionChoosePressedListener onBackOptionChoosePressedListener;
+ //   private FrameLayout tabletViewFrameLayout;
+  //  private boolean mTwoPane = false;
+   /* private OnBackPressedListener onBackPressedListener;
+    private OnBackOptionChoosePressedListener onBackOptionChoosePressedListener;*/
     private boolean doubleBackToExitPressedOnce = false;
 
     ArrayList<BakeryRecipiesListBean> mBakeryRecipiesArrayListBeans;
@@ -71,14 +69,14 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
         mRecipiListRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mBakeryRecipiesArrayListBeans = new ArrayList<BakeryRecipiesListBean>();
 
-        tabletViewFrameLayout = (FrameLayout) findViewById(R.id.tabletViewFrameLayout);
+       // tabletViewFrameLayout = (FrameLayout) findViewById(R.id.tabletViewFrameLayout);
 
         getSupportActionBar().setTitle(getResources().getString(R.string.MiriamRecipieList));
 
 
-        if (tabletViewFrameLayout != null) {
+/*        if (tabletViewFrameLayout != null) {
             mTwoPane = true;
-        }
+        }*/
 
         networkCallToLoadData();
         getIdlingResource();
@@ -120,7 +118,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                                         bundle.putParcelableArrayList(getResources().getString(R.string.bakery_master_list), lBakeryRecipiesListBeans);
                                         bundle.putParcelableArrayList(getResources().getString(R.string.ingredient_list), lBakeryRecipiesListBeans.get(position).getBakeryIngridentsListBeans());
                                         bundle.putParcelableArrayList(getResources().getString(R.string.steps_list), lBakeryRecipiesListBeans.get(position).getBakeryStepsListBeans());
-                                        bundle.putBoolean(getResources().getString(R.string.is_two_pane), mTwoPane);
+                                      /*  bundle.putBoolean(getResources().getString(R.string.is_two_pane), mTwoPane);
                                         BakeryIngredientsStepOptionsChooseFragment bakeryIngredientsStepOptionsChooseFragment = new BakeryIngredientsStepOptionsChooseFragment();
                                         bakeryIngredientsStepOptionsChooseFragment.setArguments(bundle);
                                         //  intent.putExtras(bundle);
@@ -140,12 +138,12 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
                                             }
 
 
-                                        } else {
+                                        } else {*/
                                             Intent intent = new Intent(mContext, BakeryIngredientsStepOptionsChooseActivity.class);
                                             intent.putExtras(bundle);
                                             startActivityForResult(intent, RECIPIE_MASTER_LIST_LISTENER_CODE);
 
-                                        }
+                                        /*}*/
                                     }
 //                                    }
                                 });
@@ -176,7 +174,7 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
     public void onBackPressed() {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
-        if (onBackPressedListener != null) {
+ /*       if (onBackPressedListener != null) {
 
             if (getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.bakerryRecipieDetailViewFragment)) instanceof BakerryRecipieDetailViewFragment) {
                 onBackPressedListener.forDetailsPageBackPressed(count);
@@ -185,18 +183,18 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
             if (getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.bakeryIngredientsStepOptionsChooseFragment)) instanceof BakeryIngredientsStepOptionsChooseFragment) {
                 onBackOptionChoosePressedListener.forOptionChooseBackPressed(count);
             }
-        } else {
+        } else {*/
             super.onBackPressed();
-        }
+        /*}*/
     }
 
-    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+/*    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
     }
 
     public void setOnOptionChooseBackPressedListener(OnBackOptionChoosePressedListener onOptionChooseBackPressedListener) {
         this.onBackOptionChoosePressedListener = onOptionChooseBackPressedListener;
-    }
+    }*/
 
     @Override
     public void isNetworkAvailable() {
@@ -204,13 +202,13 @@ public class BakeryHome extends AppCompatActivity implements VolleyConnectionCla
 
     }
 
-    public interface OnBackPressedListener {
+/*    public interface OnBackPressedListener {
         public void forDetailsPageBackPressed(int currentFragmentCount);
     }
 
     public interface OnBackOptionChoosePressedListener {
 
         public void forOptionChooseBackPressed(int currentFragmentCount);
-    }
+    }*/
 
 }

@@ -20,10 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activities.BakeryShowViews"
-            android:parentActivityName=".Activities.BakeryHome"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <activity android:name=".Activities.BakeryIngredientsStepOptionsChooseActivity" />
 
@@ -31,7 +27,7 @@
 
         <activity android:name=".Activities.BakeryRecipeStepsVideoPlayerActivity" />
 
-        <receiver android:name=".WidgetBakeryRecipieHome">
+        <receiver android:name=".Widgets.WidgetBakeryRecipieHome">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -42,11 +38,11 @@
         </receiver>
 
         <service
-            android:name=".BakeryDataLoadWidgetService"
+            android:name=".Widgets.BakeryDataLoadWidgetService"
             android:exported="false" />
 
         <service
-            android:name=".GridWidgetSevice"
+            android:name=".Widgets.GridWidgetSevice"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 

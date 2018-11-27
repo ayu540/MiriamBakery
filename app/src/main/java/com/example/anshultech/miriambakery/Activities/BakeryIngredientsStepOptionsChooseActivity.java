@@ -27,7 +27,7 @@ public class BakeryIngredientsStepOptionsChooseActivity extends AppCompatActivit
     private ArrayList<BakeryStepsListBean> mBakeryStepsListBeans;
     private int mRecipeMasterListClickedPosition;
     private final int RECIPIE_CHOOSER_LIST_CODE = 12;
-    private boolean mTwoPane = false;
+ //   private boolean mTwoPane = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class BakeryIngredientsStepOptionsChooseActivity extends AppCompatActivit
             mRecipeMasterListClickedPosition = getIntent().getExtras().getInt(getResources().getString(R.string.clicked_position));
             mBakeryIngridentsListBeans = getIntent().getExtras().getParcelableArrayList(getResources().getString(R.string.ingredient_list));
             mBakeryStepsListBeans = getIntent().getExtras().getParcelableArrayList(getResources().getString(R.string.steps_list));
-            mTwoPane = getIntent().getExtras().getBoolean(getResources().getString(R.string.is_two_pane));
+     //       mTwoPane = getIntent().getExtras().getBoolean(getResources().getString(R.string.is_two_pane));
         }
 
 
@@ -54,7 +54,7 @@ public class BakeryIngredientsStepOptionsChooseActivity extends AppCompatActivit
             mRecipeMasterListClickedPosition = savedInstanceState.getInt(getResources().getString(R.string.clicked_position));
             mBakeryIngridentsListBeans = savedInstanceState.getParcelableArrayList(getResources().getString(R.string.ingredient_list));
             mBakeryStepsListBeans = savedInstanceState.getParcelableArrayList(getResources().getString(R.string.steps_list));
-            mTwoPane = savedInstanceState.getBoolean(getResources().getString(R.string.is_two_pane));
+       //     mTwoPane = savedInstanceState.getBoolean(getResources().getString(R.string.is_two_pane));
         }
 
 
@@ -69,7 +69,7 @@ public class BakeryIngredientsStepOptionsChooseActivity extends AppCompatActivit
         outState.putInt(getResources().getString(R.string.clicked_position), mRecipeMasterListClickedPosition);
         outState.putParcelableArrayList(getResources().getString(R.string.ingredient_list), mBakeryIngridentsListBeans);
         outState.putParcelableArrayList(getResources().getString(R.string.steps_list), mBakeryStepsListBeans);
-        outState.putBoolean(getResources().getString(R.string.is_two_pane), mTwoPane);
+    //    outState.putBoolean(getResources().getString(R.string.is_two_pane), mTwoPane);
     }
 
     private void prepareRecipieButtonData() {
@@ -78,7 +78,7 @@ public class BakeryIngredientsStepOptionsChooseActivity extends AppCompatActivit
             final Bundle bundle = new Bundle();
             bundle.putInt(getResources().getString(R.string.clicked_position), mRecipeMasterListClickedPosition);
             bundle.putParcelableArrayList(getResources().getString(R.string.bakery_master_list), mBakeryRecipiesListBeans);
-            bundle.putBoolean(getResources().getString(R.string.is_two_pane), mTwoPane);
+          //  bundle.putBoolean(getResources().getString(R.string.is_two_pane), mTwoPane);
             mIngredientsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -113,11 +113,11 @@ public class BakeryIngredientsStepOptionsChooseActivity extends AppCompatActivit
 
 
     private void loadNextActivity(Bundle bundle) {
-        if (mTwoPane == false) {
+       // if (mTwoPane == false) {
             Intent intent = new Intent(mContext, BakerryRecipieDetailViewActivity.class);
             intent.putExtras(bundle);
             startActivityForResult(intent, RECIPIE_CHOOSER_LIST_CODE);
-        }
+        //}
     }
 
 }
